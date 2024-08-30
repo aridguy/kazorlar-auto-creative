@@ -71,7 +71,7 @@ const Navbar = () => {
               <a
                 data-mdb-dropdown-init
                 className="link-secondary me-3 dropdown-toggle hidden-arrow"
-                href="#"
+                href="/"
                 id="navbarDropdownMenuLink"
                 role="button"
                 aria-expanded="false"
@@ -86,17 +86,17 @@ const Navbar = () => {
                 aria-labelledby="navbarDropdownMenuLink"
               >
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="/">
                     Some news
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="/">
                     Another news
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="/">
                     Something else here
                   </a>
                 </li>
@@ -107,7 +107,7 @@ const Navbar = () => {
               <a
                 data-mdb-dropdown-init
                 className="dropdown-toggle d-flex align-items-center hidden-arrow"
-                href="#"
+                href="/"
                 id="navbarDropdownMenuAvatar"
                 role="button"
                 aria-expanded="false"
@@ -125,17 +125,17 @@ const Navbar = () => {
                 aria-labelledby="navbarDropdownMenuAvatar"
               >
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="/">
                     My profile
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="/">
                     Settings
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="/">
                     Logout
                   </a>
                 </li>
