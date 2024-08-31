@@ -4,7 +4,7 @@ import Product1 from "../assets/IMG_7870-1024x768.jpg";
 import Footer from "../components/Footer";
 
 const About = () => {
-  const brandName = "Kazorler Auto-Creative";
+  // const brandName = "Kazorler Auto-Creative";
   return (
     <div>
       <Navbar />
