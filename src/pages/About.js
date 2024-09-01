@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Product1 from "../assets/IMG_7870-1024x768.jpg";
 import Footer from "../components/Footer";
+import Aos from "aos";
 
 const About = () => {
+  useEffect(() => {
+    Aos.init({
+      duration: 1000, // Duration of the animation (in milliseconds)
+      once: true,     // Whether animation should happen only once
+      mirror: false   // Whether elements should animate out while scrolling past them
+    });
+  }, []);
   // const brandName = "Kazorler Auto-Creative";
   return (
     <div>
       <Navbar />
       <div className="container-fluid mt-4 pt-5 about_hero text-white">
-        <h1 className="about_hero_text">ABOUT US</h1>
-        <p className="lead">Kazorler Auto-Creative</p>
+        <h1 data-aos="fade-right" className="about_hero_text">ABOUT US</h1>
+        <p data-aos="fade-left" className="lead">Kazorler Auto-Creative</p>
       </div>
       <div className="container-fluid mt-5 pt-5">
         <div className="row">
@@ -19,6 +27,7 @@ const About = () => {
             <div className="row">
               <div className="col-md-5">
                 <div
+                data-aos="fade-right"
                   className="pt-5 box_about_bg p-5"
                   style={{ width: "100%", height: "100vh" }}
                 >
@@ -41,7 +50,7 @@ const About = () => {
                 </div>
               </div>
               <div className="col-md-7">
-                <div>
+                <div data-aos="fade-left">
                   <img width="100%" src={Product1} alt="img_upjhols" />
                 </div>
               </div>

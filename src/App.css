@@ -6,15 +6,15 @@
   width: 100%;
 }
 
-.red{
-    color: red;
+.red {
+  color: red;
 }
-.bg-red{
-    background-color: red;
+.bg-red {
+  background-color: red;
 }
-.box_about_bg{
-    background-color: rgba(243, 240, 240, 0.336);
-    box-shadow: 1px 4px 6px 1px rgba(0, 0, 0, 0.116);
+.box_about_bg {
+  background-color: rgba(243, 240, 240, 0.336);
+  box-shadow: 1px 4px 6px 1px rgba(0, 0, 0, 0.116);
 }
 
 .about_hero {
@@ -91,18 +91,36 @@
   color: #006eff; /* Gold color on hover */
 }
 .hero_text {
-    font-size: 70px;
-    font-weight: 700;
-    margin-top: 40px;
-  }
-  
+  font-size: 70px;
+  font-weight: 700;
+  margin-top: 40px;
+}
+
+.appointment_modal_parent {
+  background-color: rgba(0, 0, 0, 0.527);
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+
+  z-index: 999;
+}
+
+.appointment_form_bg{
+    background: white;
+    height: 70vh;
+    width: 100%;
+    overflow-y: scroll;
+    border-radius: 10px;
+   
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .navbar-toggle {
     display: block;
   }
 
-  .hero_text{
+  .hero_text {
     font-size: 40px;
   }
   .extra {
@@ -132,27 +150,28 @@
   }
 }
 
-.contact_input, input {
-    background-color: #43c61b00;
-    border: none;
-    border-bottom: 2px dotted #000;
-    color: #857209;
-    font-size: 20px;
-    margin-top: 1.5em;
-    outline: none;
-    padding-bottom: .8em;
-    padding-left: .5em;
-    width: 100%;
+.contact_input,
+.contact_input {
+  background-color: #43c61b00;
+  border: none;
+  border-bottom: 2px dotted #000;
+  color: #857209;
+  font-size: 20px;
+  margin-top: 1.5em;
+  outline: none;
+  padding-bottom: 0.8em;
+  padding-left: 0.5em;
+  width: 100%;
 }
 
 .sendBtn {
-    background-color: #18a1f0;
-    border: none;
-    border-radius: 50px;
-    color: #fff;
-    float: right;
-    font-family: Euclid Circular A;
-    height: 3.4em;
-    outline: none;
-    width: 8em;
+  background-color: #18a1f0;
+  border: none;
+  border-radius: 50px;
+  color: #fff;
+  float: right;
+  font-family: Euclid Circular A;
+  height: 3.4em;
+  outline: none;
+  width: 8em;
 }
