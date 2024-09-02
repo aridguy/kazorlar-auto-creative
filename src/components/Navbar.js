@@ -124,7 +124,7 @@ const Navbar = () => {
           />{" "}
           &nbsp;
           <small>
-            Welcome, <b className="text-info">{visitorName} 😎</b> &nbsp;
+            Welcome, <b className="text-info">{visitorName} 😎</b>
            
           </small>
         </div>
