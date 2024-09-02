@@ -15,6 +15,7 @@ import Projects from "./pages/Projects";
 import Blog from "./pages/Blog";
 
 function App() {
+  
   return (
     <div>
       <Router>
@@ -34,6 +35,7 @@ function App() {
           </Routes>
         </div>
       </Router>
+      
     </div>
   );
 }
