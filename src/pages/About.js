@@ -3,82 +3,27 @@ import Navbar from "../components/Navbar";
 import Product1 from "../assets/IMG_7870-1024x768.jpg";
 import Footer from "../components/Footer";
 import Aos from "aos";
-import pics1 from "../assets/img/c.jpg"
-import pics2 from "../assets/img/e.jpg"
-import pics4 from "../assets/img/i.jpg"
-import pics3 from "../assets/img/ii.jpg"
-import pics5 from "../assets/img/j.jpg"
-import pics6 from "../assets/img/k.jpg"
-import pics7 from "../assets/img/l.jpg"
-import pics8 from "../assets/img/m.jpg"
-import pics9 from "../assets/img/n.jpg"
-import pics10 from "../assets/img/o.jpg"
-import pics11 from "../assets/img/p.jpg"
-import ImageGallery from "react-image-gallery";
 
 const About = () => {
   useEffect(() => {
     Aos.init({
       duration: 1000, // Duration of the animation (in milliseconds)
-      once: true,     // Whether animation should happen only once
-      mirror: false   // Whether elements should animate out while scrolling past them
+      once: true, // Whether animation should happen only once
+      mirror: false, // Whether elements should animate out while scrolling past them
     });
   }, []);
   // const brandName = "Kazorler Auto-Creative";
 
-  const images = [
-    {
-      original: pics1,
-      thumbnail: pics1,
-    },
-    {
-      original: pics2,
-      thumbnail: pics2,
-    },
-    {
-      original: pics3,
-      thumbnail: pics3,
-    },
-    {
-      original: pics4,
-      thumbnail: pics4,
-    },
-    {
-      original: pics5,
-      thumbnail: pics5,
-    },
-    {
-      original: pics6,
-      thumbnail: pics6,
-    },
-    {
-      original: pics7,
-      thumbnail: pics7,
-    },
-    {
-      original: pics8,
-      thumbnail: pics8,
-    },
-    {
-      original: pics9,
-      thumbnail: pics9,
-    },
-    {
-      original: pics10,
-      thumbnail: pics10,
-    },
-    {
-      original: pics11,
-      thumbnail: pics11,
-    },
-    
-  ];
   return (
     <div>
       <Navbar />
       <div className="container-fluid mt-4 pt-5 about_hero text-white">
-        <h1 data-aos="fade-right" className="about_hero_text">ABOUT US</h1>
-        <p data-aos="fade-left" className="lead">Kazorler Auto-Creative</p>
+        <h1 data-aos="fade-right" className="about_hero_text">
+          ABOUT US
+        </h1>
+        <p data-aos="fade-left" className="lead">
+          Kazorler Auto-Creative
+        </p>
       </div>
       <div className="container-fluid mt-5 pt-5">
         <div className="row">
@@ -87,7 +32,7 @@ const About = () => {
             <div className="row">
               <div className="col-md-5">
                 <div
-                data-aos="fade-right"
+                  data-aos="fade-right"
                   className="pt-5 box_about_bg p-5"
                   style={{ width: "100%", height: "100vh" }}
                 >
@@ -113,7 +58,6 @@ const About = () => {
                 <div data-aos="fade-left">
                   <img width="100%" src={Product1} alt="img_upjhols" />
                 </div>
-                
               </div>
             </div>
           </div>
