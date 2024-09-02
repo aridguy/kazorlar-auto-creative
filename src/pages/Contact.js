@@ -21,6 +21,7 @@ const Contact = () => {
       text: "Message has been delivered!",
       icon: "success",
     });
+  
   }
   return (
     <div>

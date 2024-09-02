@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import Marquee from "react-fast-marquee";
 import AOS from "aos";
 import "aos/dist/aos.css"; // Import the AOS styles
+import { useForm } from "@formspree/react";
 
 const Navbar = () => {
   useEffect(() => {
@@ -36,6 +37,18 @@ const Navbar = () => {
   };
 
   const openAppointment = () => setAppointment((prevState) => !prevState);
+
+  const [state, handleSubmit] = useForm("mqazjznb");
+
+  if (state.succeeded) {
+    Swal.fire({
+      title: "Successful?",
+      text: "Appointment has been booked?",
+      icon: "question",
+    }).then((result) => {
+      setAppointment(false);
+    });
+  }
 
   return (
     <div>
@@ -122,7 +135,7 @@ const Navbar = () => {
                   <div className="row">
                     <div className="col-md-2"></div>
                     <div className="col-md-8">
-                      <form>
+                      <form onSubmit={handleSubmit}>
                         <p>
                           <sup>Name</sup>
                           <input
@@ -173,11 +186,14 @@ const Navbar = () => {
                         </p>
                         <p>
                           <sup>Choose Service Needed</sup>
-                          <select className="form-control" required>
+                          <select
+                            className="form-control"
+                            name="service"
+                            required
+                          >
                             <option value="" disabled selected>
                               Choose
                             </option>
-
                             <optgroup label="Automotive Services">
                               <option value="headliners">Headliners</option>
                               <option value="vinyl-tops">Vinyl Tops</option>
@@ -194,11 +210,7 @@ const Navbar = () => {
                                 Auto Detailing
                               </option>
                             </optgroup>
-
-                            <optgroup
-                              className=""
-                              label="Interior Repair & Restoration"
-                            >
+                            <optgroup label="Interior Repair & Restoration">
                               <option value="vinyl-leather-repairs-dyeing">
                                 Vinyl & Leather Repairs & Dyeing
                               </option>
@@ -207,7 +219,6 @@ const Navbar = () => {
                               </option>
                               <option value="carpets-rugs">Carpets/Rugs</option>
                             </optgroup>
-
                             <optgroup label="Furniture Upholstery">
                               <option value="house-furniture">
                                 House Furniture
@@ -217,7 +228,6 @@ const Navbar = () => {
                                 Office Chairs
                               </option>
                             </optgroup>
-
                             <optgroup label="Specialty Services">
                               <option value="boat-cushions">
                                 Boat Cushions
@@ -234,7 +244,6 @@ const Navbar = () => {
                             </optgroup>
                           </select>
                         </p>
-
                         <p>
                           <sup>Description</sup>
                           <textarea
@@ -254,11 +263,10 @@ const Navbar = () => {
                           />
                         </p>
                         <p>
-                          <sup>comment or special request</sup>
+                          <sup>Comment or special request</sup>
                           <textarea
                             className="form-control"
-                            name="special request"
-                        
+                            name="special-request"
                             placeholder="special request"
                           ></textarea>
                         </p>
@@ -266,10 +274,10 @@ const Navbar = () => {
                           <small className="lead">How to reach me!</small>
                         </p>
                         <p>
-                          <input type="checkbox" name="ThroPhone" />
+                          <input type="checkbox" name="throughPhone" />
                           &nbsp;&nbsp;
                           <small>Phone</small> &nbsp;&nbsp;
-                          <input type="checkbox" name="ThroEmail" />{" "}
+                          <input type="checkbox" name="throughEmail" />
                           &nbsp;&nbsp;
                           <small>Email Address</small>
                         </p>
@@ -281,7 +289,11 @@ const Navbar = () => {
                             debit card or banking information
                           </p>
                         </Marquee>
-                        <button className="border btn btn-info btn-block block">
+                        <button
+                          className="border btn btn-info btn-block block"
+                          type="submit"
+                          disabled={state.submitting}
+                        >
                           Book Now!
                         </button>
                       </form>

@@ -3,6 +3,18 @@ import Navbar from "../components/Navbar";
 import Product1 from "../assets/IMG_7870-1024x768.jpg";
 import Footer from "../components/Footer";
 import Aos from "aos";
+import pics1 from "../assets/img/c.jpg"
+import pics2 from "../assets/img/e.jpg"
+import pics4 from "../assets/img/i.jpg"
+import pics3 from "../assets/img/ii.jpg"
+import pics5 from "../assets/img/j.jpg"
+import pics6 from "../assets/img/k.jpg"
+import pics7 from "../assets/img/l.jpg"
+import pics8 from "../assets/img/m.jpg"
+import pics9 from "../assets/img/n.jpg"
+import pics10 from "../assets/img/o.jpg"
+import pics11 from "../assets/img/p.jpg"
+import ImageGallery from "react-image-gallery";
 
 const About = () => {
   useEffect(() => {
@@ -13,6 +25,54 @@ const About = () => {
     });
   }, []);
   // const brandName = "Kazorler Auto-Creative";
+
+  const images = [
+    {
+      original: pics1,
+      thumbnail: pics1,
+    },
+    {
+      original: pics2,
+      thumbnail: pics2,
+    },
+    {
+      original: pics3,
+      thumbnail: pics3,
+    },
+    {
+      original: pics4,
+      thumbnail: pics4,
+    },
+    {
+      original: pics5,
+      thumbnail: pics5,
+    },
+    {
+      original: pics6,
+      thumbnail: pics6,
+    },
+    {
+      original: pics7,
+      thumbnail: pics7,
+    },
+    {
+      original: pics8,
+      thumbnail: pics8,
+    },
+    {
+      original: pics9,
+      thumbnail: pics9,
+    },
+    {
+      original: pics10,
+      thumbnail: pics10,
+    },
+    {
+      original: pics11,
+      thumbnail: pics11,
+    },
+    
+  ];
   return (
     <div>
       <Navbar />
@@ -53,6 +113,7 @@ const About = () => {
                 <div data-aos="fade-left">
                   <img width="100%" src={Product1} alt="img_upjhols" />
                 </div>
+                
               </div>
             </div>
           </div>
