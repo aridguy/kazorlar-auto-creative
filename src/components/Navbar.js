@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
-import { TfiPowerOff } from "react-icons/tfi";
+
 import Logo from "../assets/logo.jpg";
 import Swal from "sweetalert2";
 import Marquee from "react-fast-marquee";
@@ -25,8 +25,16 @@ const Navbar = () => {
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
+  const savedName = localStorage.getItem("userName");
+  const [visitorName, setVisitorName] = useState(savedName);
+  useEffect(() => {
+    // Load the name from localStorage when the component mounts
+    const storedName = localStorage.getItem("userName");
+    if (storedName) {
+      setVisitorName(storedName);
+    }
+  }, []);
 
-  const [visitorName] = useState("Idowu Ariyo");
   const InProgress = () => {
     Swal.fire({
       icon: "error",
@@ -49,8 +57,6 @@ const Navbar = () => {
       setAppointment(false);
     });
   }
-
-  
 
   return (
     <div>
@@ -118,8 +124,8 @@ const Navbar = () => {
           />{" "}
           &nbsp;
           <small>
-            Welcome Back, <b className="text-info">{visitorName}</b> &nbsp;
-            <TfiPowerOff className="cursor" />
+            Welcome, <b className="text-info">{visitorName} 😎</b> &nbsp;
+           
           </small>
         </div>
       </nav>
