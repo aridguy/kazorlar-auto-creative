@@ -78,7 +78,7 @@ const Home = () => {
       thumbnail: pics11,
     },
   ];
-  const brandName = "Kazorler Auto-Creative";
+  // const brandName = "Kazorler Auto-Creative";
   const [openRegUser, setOpenRegUser] = useState(false);
   useEffect(() => {
     // Check if the modal has already been shown
