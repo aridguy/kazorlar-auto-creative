@@ -7,22 +7,20 @@ import Swal from "sweetalert2";
 import Aos from "aos";
 
 const Contact = () => {
-  const endPointKey = process.env.REACT_APP_FORMSPREE_FORM_ID
   useEffect(() => {
     Aos.init({
       duration: 1000, // Duration of the animation (in milliseconds)
-      once: true,     // Whether animation should happen only once
-      mirror: false   // Whether elements should animate out while scrolling past them
+      once: true, // Whether animation should happen only once
+      mirror: false, // Whether elements should animate out while scrolling past them
     });
   }, []);
-  const [state, handleSubmit] = useForm(endPointKey);
+  const [state, handleSubmit] = useForm("mqazjznb");
   if (state.succeeded) {
     Swal.fire({
       title: "Successful?",
       text: "Message has been delivered!",
       icon: "success",
     });
-  
   }
   return (
     <div>
@@ -40,7 +38,11 @@ const Contact = () => {
           </div>
         </div>
         <div className="row mt-4">
-          <div data-aos="fade-right" data-aos-delay="1000" className="col-md-6 ">
+          <div
+            data-aos="fade-right"
+            data-aos-delay="1000"
+            className="col-md-6 "
+          >
             <div className="d-flex ">
               <h2
                 style={{
@@ -59,7 +61,11 @@ const Contact = () => {
               will like to view any of these projects.
             </p>
           </div>
-          <div data-aos="fade-right" data-aos-delay="81200" className="col-md-6">
+          <div
+            data-aos="fade-right"
+            data-aos-delay="81200"
+            className="col-md-6"
+          >
             <div className="form_place ">
               <form className="" onSubmit={handleSubmit}>
                 <div>
@@ -83,7 +89,7 @@ const Contact = () => {
                     placeholder="email"
                     required
                     id="email"
-                     className="contact_input"
+                    className="contact_input"
                   />
                   <ValidationError
                     prefix="Email"
@@ -97,7 +103,7 @@ const Contact = () => {
                     name="Subject"
                     placeholder="Subject"
                     required
-                     className="contact_input"
+                    className="contact_input"
                     id="subject"
                   />
                   <ValidationError
@@ -113,7 +119,7 @@ const Contact = () => {
                     name="Message"
                     placeholder="Message"
                     required
-                     className="contact_input"
+                    className="contact_input"
                   />
                   <ValidationError
                     prefix="Message"
@@ -136,9 +142,7 @@ const Contact = () => {
         </div>
       </div>
       <div className="container">
-        <div className="row">
-        
-        </div>
+        <div className="row"></div>
       </div>
       <Footer />
     </div>
