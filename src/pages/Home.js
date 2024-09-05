@@ -125,7 +125,7 @@ const Home = () => {
         localStorage.setItem("userName", formData.name);
         setFormData({ name: "", email: "" }); // Reset form fields
         setOpenRegUser(false);
-        navigate("/about")
+        navigate("/about");
       })
       .catch((error) => {
         console.error("There was an error!", error);
