@@ -218,21 +218,29 @@ const Home = () => {
                   </div>
                   <div className="" data-aos="fade-left">
                     <p className="lead">
-                      {brandName} is your online resource for car upholstering.
-                      Bring us your car to re-upholster or pick what you want
-                      and we'll ship it to you.
+                      Crafting Excellence | With a decade of expertise in auto
+                      upholstery, we transform interiors into masterpieces,
+                      tailored to perfection for cars, boats, and motorcycles.
                     </p>
                     <p className="lead">
-                      At {brandName}, we will re-upholster your vehicle's whole
-                      interior or we will sell you everything you need to do it
-                      yourself. We'll provide the seat covers, door panels,
-                      headliners, carpets and more!
+                      Precision & Passion | Our 10+ years of experience in auto
+                      upholstery ensure exceptional results, elevating your
+                      vehicle's comfort and style.
                     </p>
                     <p className="lead">
-                      Our styles include original and custom designs. We also
-                      re-upholster boats, RV's, restaurant & and bar equipment,
-                      fitness equipment, wave runner seats, snowmobile and
-                      tractor seats, and furniture too.
+                      Upholstery Perfected | Leveraging over 12years of
+                      expertise, we deliver bespoke solutions for cars, boats,
+                      and motorcycles, blending quality and creativity.
+                    </p>{" "}
+                    <p className="lead">
+                      Expert Touch | With a proven track record of 12+ years in
+                      auto upholstery, we guarantee top-tier craftsmanship,
+                      revitalizing your vehicle's interior.
+                    </p>
+                    <p className="lead">
+                      Where Quality Meets Artistry | Our team of skilled
+                      upholsterers, with over 12years of experience, bring your
+                      car, boat, or motorcycle interior to life.
                     </p>
                     <p className="lead">
                       <i>Let us know what you need!</i>
