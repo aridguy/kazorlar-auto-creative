@@ -5,8 +5,8 @@ import { useForm, ValidationError } from "@formspree/react";
 import Swal from "sweetalert2";
 
 const Shop = () => {
-  const WorkshopAPIKey = process.env.REACT_APP_WORKSHOP_FORM_ID;
-  const [state, handleSubmit] = useForm(WorkshopAPIKey);
+  // const WorkshopAPIKey = process.env.REACT_APP_WORKSHOP_FORM_ID
+  const [state, handleSubmit] = useForm("xldrzykr");
 
   if (state.succeeded) {
     // console.log("Successfully sent mail");
