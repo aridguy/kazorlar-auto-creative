@@ -142,7 +142,18 @@ const Contact = () => {
         </div>
       </div>
       <div className="container">
-        <div className="row"></div>
+        <div className="row mt-5">
+          <div>
+            <iframe
+              title="maps"
+              src="https://www.google.com/maps/embed?pb=!4v1725719581583!6m8!1m7!1snPb139ZVaNLbZ7kMF6Ukpg!2m2!1d6.594314431846142!2d3.365926629903162!3f155.8377386626477!4f-15.956779721671452!5f0.7820865974627469"
+              width="100%"
+              height="450"
+              allowFullScreen=""
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
       </div>
       <Footer />
     </div>
