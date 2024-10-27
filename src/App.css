@@ -189,3 +189,16 @@
   outline: none;
   width: 8em;
 }
+
+
+/* blog
+-------------------------------------------------- */
+
+.landingBlog{
+  background-color: rgb(0, 0, 0);
+  display: flex;
+  justify-content: center;  /* Horizontal center */
+  align-items: center;      /* Vertical center */
+  height: 10em;            /* Full viewport height (optional, depending on the size you want) */
+  text-align: center; 
+}
