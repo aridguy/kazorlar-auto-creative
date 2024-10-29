@@ -206,3 +206,16 @@
 .overflows{
   overflow-x: scroll;
 }
+
+/* /coments sections css properties
+ */
+ .comments{
+  height: 10em;
+ }
+ .comments, .commentName{
+  min-width: 100%;
+  outline: none;
+  border: none;
+  background-color: #00000000;
+  border-bottom: 1px solid black;
+ }

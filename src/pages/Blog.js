@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createClient } from "contentful";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+import axios from "axios";
 
 const Blog = () => {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -45,6 +46,55 @@ const Blog = () => {
   };
   const navigate = useNavigate("/");
 
+  // FOR COMMENTS ONLY
+  const [comments, setComments] = useState([]);
+  const [name, setName] = useState("");
+  const [comment, setComment] = useState("");
+
+  // Fetch existing comments on component load
+  useEffect(() => {
+    fetchComments();
+  }, []);
+
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(
+        "https://sheetdb.io/api/v1/ngswjsvfesjdd"
+      );
+      setComments(response.data); // Assuming API returns an array of comments
+      // console.log(response.data);
+      
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  const postComment = async (e) => {
+    e.preventDefault();
+    if (!name || !comment) return alert("Please enter both name and comment.");
+
+    const newComment = {
+      name,
+      comment,
+      date: new Date().toLocaleString(),
+    };
+
+    try {
+      await axios.post("https://sheetdb.io/api/v1/ngswjsvfesjdd", {
+        data: [newComment],
+      });
+
+      // Update the comments list with the new comment
+      setComments((prevComments) => [newComment, ...prevComments]);
+
+      // Clear input fields
+      setName("");
+      setComment("");
+    } catch (error) {
+      console.error("Error posting comment:", error);
+    }
+  };
+
   return (
     <div>
       <div className="container mt-5">
@@ -84,6 +134,8 @@ const Blog = () => {
                   <div key={posts.sys.id} className="col-md-3">
                     <div>
                       <img
+                        onClick={() => handleReadMore(posts)}
+                        className="cursor"
                         width="100%"
                         src={`https:${posts.fields.blogImage[0].fields.file.url}`}
                         alt="products"
@@ -185,7 +237,7 @@ const Blog = () => {
               <div className="col-md-1"></div>
               <div className="col-md-10">
                 <div
-                  className="container bg-light overflows"
+                  className="container bg-light overflows rounded-5"
                   style={{ height: "33em" }}
                 >
                   <div className="container">
@@ -206,6 +258,59 @@ const Blog = () => {
                           />
                         </div>
                         <p>{selectedBlog.fields.blogDescription}</p>
+                        <hr />
+                        <div className="leave_comment">
+                          <h3>Leave a comment here</h3>
+                          <div className="displayComments bg-grey">
+                            {comments.length === 0 ? (
+                              <p>No comments</p>
+                            ) : (
+                              comments.map((cmt, index) => (
+                                <div key={index}>
+                                  <sub className="fw-bolder">
+                                    Post by {cmt.name}
+                                  </sub>
+                                  <br />
+                                  <small>{cmt.comment}</small>
+                                  <sup className="fw-bolder">{cmt.timestamp}</sup>
+                                  <hr style={{ width: "60%" }} />
+                                </div>
+                              ))
+                            )}
+                          </div>
+                          <div className="mt-5">
+                            <form
+                              className="comment-inputs"
+                              onSubmit={postComment}
+                            >
+                              <p>
+                                <input
+                                  name="name"
+                                  className="commentName"
+                                  type="text"
+                                  placeholder="Name"
+                                  value={name}
+                                  onChange={(e) => setName(e.target.value)}
+                                />
+                              </p>
+                              <p>
+                                <textarea
+                                  placeholder="Comments"
+                                  className="comments"
+                                  name="comments"
+                                  value={comment}
+                                  onChange={(e) => setComment(e.target.value)}
+                                ></textarea>
+                              </p>
+                              <button
+                                type="submit"
+                                className="btn btn-secondary"
+                              >
+                                Post Comment . . .
+                              </button>
+                            </form>
+                          </div>
+                        </div>
                       </div>
                       <div className="col-md-2"></div>
                     </div>
