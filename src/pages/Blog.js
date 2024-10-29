@@ -261,7 +261,7 @@ const Blog = () => {
                         <hr />
                         <div className="leave_comment">
                           <h3>Leave a comment here</h3>
-                          <div className="displayComments bg-grey">
+                          <div className="displayComments l bg-grey">
                             {comments.length === 0 ? (
                               <p>No comments</p>
                             ) : (
