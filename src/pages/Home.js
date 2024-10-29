@@ -32,7 +32,7 @@ const Home = () => {
     });
   }, []);
 
-  // const images = [
+
   //   {
   //     original: pics1,
   //     thumbnail: pics1,

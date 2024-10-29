@@ -202,3 +202,7 @@
   height: 10em;            /* Full viewport height (optional, depending on the size you want) */
   text-align: center; 
 }
+
+.overflows{
+  overflow-x: scroll;
+}

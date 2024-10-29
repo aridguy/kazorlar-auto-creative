@@ -35,13 +35,8 @@ const Navbar = () => {
     }
   }, []);
 
-  const InProgress = () => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Our blog is under construction!",
-      footer: '<a href="/contact">How soon will this go live?</a>',
-    });
+  const goToBlog = () => {
+    navigate("/blog")
   };
 
   const openAppointment = () => setAppointment((prevState) => !prevState);
@@ -100,7 +95,7 @@ const Navbar = () => {
               </p>
             </li>
             <li className="navbar-item">
-              <p className="cursor" onClick={InProgress}>
+              <p className="cursor" onClick={goToBlog }>
                 Blog
               </p>
             </li>
