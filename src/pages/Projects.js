@@ -23,7 +23,7 @@ const Projects = () => {
           content_type: "gallery", // Specify the content type
         });
         setGallery(entries.items);
-        console.log(entries.items);
+        // console.log(entries.items);
       } catch (error) {
         console.error(error);
       }

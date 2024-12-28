@@ -6,7 +6,6 @@ import { createClient } from "contentful";
 
 const About = () => {
   const [about, setAbout] = useState(null); // State to hold the fetched content
-  const [loading, setLoading] = useState(true); // State for loading
   const [error, setError] = useState(null); // State for error handling
 
   // Initialize Contentful client
@@ -31,8 +30,6 @@ const About = () => {
       } catch (error) {
         console.error("Error fetching About content:", error);
         setError("Failed to fetch content. Please try again later.");
-      } finally {
-        setLoading(false); // Set loading to false once data is fetched
       }
     };
     getAllEntries();
@@ -46,15 +43,6 @@ const About = () => {
       mirror: false, // No reverse animations on scroll up
     });
   }, []);
-
-  // Loading and error states
-  if (loading) {
-    return <div>Loading...</div>; // Display while data is being fetched
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>; // Display if there's an error
-  }
 
   return (
     <div>
@@ -79,9 +67,14 @@ const About = () => {
                   style={{ width: "100%", height: "100vh" }}
                 >
                   <h2 className="red text-center">WHY US?</h2>
-                  <p className="lead">
-                    {about?.aboutDescription?.content[0]?.content[0]?.value || "Description unavailable."}
-                  </p>
+                  {error ? (
+                    <p className="lead text-danger">{error}</p>
+                  ) : (
+                    <p className="">
+                      {about?.aboutDescription?.content[0]?.content[0]?.value ||
+                        "Description unavailable."}
+                    </p>
+                  )}
                   <br />
                   <button className="bg-red border text-white btn">
                     Get a Quote
@@ -90,11 +83,17 @@ const About = () => {
               </div>
               <div className="col-md-7">
                 <div data-aos="fade-left">
-                  <img
-                    width="100%"
-                    src={`https:${about?.aboutImage?.fields?.file?.url}`}
-                    alt={about?.aboutImage?.fields?.title || "About Image"}
-                  />
+                  {about?.aboutImage?.fields?.file?.url ? (
+                    <img
+                      width="100%"
+                      src={`https:${about.aboutImage.fields.file.url}`}
+                      alt={
+                        about.aboutImage.fields.title || "About Image"
+                      }
+                    />
+                  ) : (
+                    <p className="text-center">Image unavailable.</p>
+                  )}
                 </div>
               </div>
             </div>

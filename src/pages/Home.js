@@ -22,7 +22,6 @@ const Home = () => {
     });
   }, []);
 
-
   //   {
   //     original: pics1,
   //     thumbnail: pics1,
@@ -151,7 +150,7 @@ const Home = () => {
                       >
                         With over 10 years experience in auto upholstery, <br />{" "}
                         we will create, repair or upgrade your car, boat or{" "}
-                        <br /> motorcycle upholstery to be it’s very best.
+                        <br /> motorcycle and Aircraft upholstery to be it’s very best.
                       </sup>
                     </div>
                   </div>
@@ -202,38 +201,71 @@ const Home = () => {
                 <div className="col-md-9">
                   <div>
                     <h3 data-aos="fade-right">
-                      Welcome to{" "}
-                      <span className="text-info">Kazorler Auto-Creative</span>
+                      Automotive & Aircraft{" "}
+                      <span className="text-info">Upholstery Experts</span>
                     </h3>
+                    <h4 data-aos="fade-right">
+                      Transforming Vehicles and Aircraft with Precision and
+                      Style
+                    </h4>
                   </div>
                   <div className="" data-aos="fade-left">
                     <p className="lead">
-                      Crafting Excellence | With a decade of expertise in auto
-                      upholstery, we transform interiors into masterpieces,
-                      tailored to perfection for cars, boats, and motorcycles.
+                      With over 10 years of experience in crafting exceptional
+                      upholstery solutions, our team of skilled artisans
+                      possesses a unique blend of traditional techniques and
+                      modern expertise.
                     </p>
+                    <h5>Automotive Design</h5>
+                    <ul className="lead">
+                      <li>Custom upholstery for cars, trucks, SUVs, and RVs</li>
+                      <li>
+                        Expertise in automotive design and interior restoration
+                      </li>
+                      <li>
+                        Precision sewing and hand tool expertise for precise
+                        upholstery work
+                      </li>
+                      <li>Various finishing techniques for a polished look</li>
+                    </ul>
+                    <h5>Aircraft Upholstery</h5>
+                    <ul className="lead">
+                      <li>Custom upholstery for aircraft interiors</li>
+                      <li>
+                        Restoration and revitalization of existing aircraft
+                        upholstery
+                      </li>
+                      <li>
+                        Expertise in working with specialized aircraft materials
+                        and techniques
+                      </li>
+                      <li>
+                        Intricate buttoning details and precision sewing for
+                        upholstery
+                      </li>
+                    </ul>
+                    <h5>Our Promise</h5>
+                    <ul className="lead">
+                      <li>
+                        Unwavering commitment to exceptional quality standards
+                      </li>
+                      <li>Attention to detail for flawless execution</li>
+                      <li>
+                        Dedicated to bringing clients' ideas to life, exceeding
+                        expectations with every delivery
+                      </li>
+                    </ul>
+                    <h5>Why Choose Us?</h5>
+                    <ul className="lead">
+                      <li>Over 10 years of experience in upholstery</li>
+                      <li>Unique blend of traditional and modern techniques</li>
+                      <li>Exceptional quality standards</li>
+                      <li>Attention to detail and commitment to excellence</li>
+                    </ul>
                     <p className="lead">
-                      Precision & Passion | Our 10+ years of experience in auto
-                      upholstery ensure exceptional results, elevating your
-                      vehicle's comfort and style.
-                    </p>
-                    <p className="lead">
-                      Upholstery Perfected | Leveraging over 12years of
-                      expertise, we deliver bespoke solutions for cars, boats,
-                      and motorcycles, blending quality and creativity.
-                    </p>{" "}
-                    <p className="lead">
-                      Expert Touch | With a proven track record of 12+ years in
-                      auto upholstery, we guarantee top-tier craftsmanship,
-                      revitalizing your vehicle's interior.
-                    </p>
-                    <p className="lead">
-                      Where Quality Meets Artistry | Our team of skilled
-                      upholsterers, with over 12years of experience, bring your
-                      car, boat, or motorcycle interior to life.
-                    </p>
-                    <p className="lead">
-                      <i>Let us know what you need!</i>
+                      Ready to experience the art of upholstery? Contact us
+                      today to discuss your project and let us bring your vision
+                      to life!
                     </p>
                     <button
                       onClick={() => navigate("/contact")}
@@ -243,12 +275,11 @@ const Home = () => {
                     </button>
                   </div>
                 </div>
+
                 <div className="col-md-3"></div>
               </div>
               <div className="row mt-4">
-                <div className="">
-                 
-                </div>
+                <div className=""></div>
               </div>
             </div>
             <div className="col-md-2"></div>
