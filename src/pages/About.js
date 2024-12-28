@@ -36,7 +36,7 @@ const About = () => {
       }
     };
     getAllEntries();
-  }, []);
+  }, [client]);
 
   // Initialize AOS animations
   useEffect(() => {
@@ -48,13 +48,13 @@ const About = () => {
   }, []);
 
   // Loading and error states
-  // if (loading) {
-  //   return <div>Loading...</div>; // Display while data is being fetched
-  // }
+  if (loading) {
+    return <div>Loading...</div>; // Display while data is being fetched
+  }
 
-  // if (error) {
-  //   return <div>Error: {error}</div>; // Display if there's an error
-  // }
+  if (error) {
+    return <div>Error: {error}</div>; // Display if there's an error
+  }
 
   return (
     <div>

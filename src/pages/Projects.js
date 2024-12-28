@@ -29,7 +29,7 @@ const Projects = () => {
       }
     };
     getAllEntries();
-  }, []);
+  }, [client]);
 
   // Extract image URLs for lightbox navigation
   const images = gallery.map(
