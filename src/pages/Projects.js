@@ -1,67 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import ImageGallery from "react-image-gallery";
-import "react-image-gallery/styles/css/image-gallery.css";
-import pics1 from "../assets/img/c.jpg";
-import pics2 from "../assets/img/e.jpg";
-import pics4 from "../assets/img/i.jpg";
-import pics3 from "../assets/img/ii.jpg";
-import pics5 from "../assets/img/j.jpg";
-import pics6 from "../assets/img/k.jpg";
-import pics7 from "../assets/img/l.jpg";
-import pics8 from "../assets/img/m.jpg";
-import pics9 from "../assets/img/n.jpg";
-import pics10 from "../assets/img/o.jpg";
-import pics11 from "../assets/img/p.jpg";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { createClient } from "contentful";
+import "react-image-lightbox/style.css";
+import Lightbox from "react-image-lightbox";
 
 const Projects = () => {
-  const images = [
-    {
-      original: pics1,
-      thumbnail: pics1,
-    },
-    {
-      original: pics2,
-      thumbnail: pics2,
-    },
-    {
-      original: pics3,
-      thumbnail: pics3,
-    },
-    {
-      original: pics4,
-      thumbnail: pics4,
-    },
-    {
-      original: pics5,
-      thumbnail: pics5,
-    },
-    {
-      original: pics6,
-      thumbnail: pics6,
-    },
-    {
-      original: pics7,
-      thumbnail: pics7,
-    },
-    {
-      original: pics8,
-      thumbnail: pics8,
-    },
-    {
-      original: pics9,
-      thumbnail: pics9,
-    },
-    {
-      original: pics10,
-      thumbnail: pics10,
-    },
-    {
-      original: pics11,
-      thumbnail: pics11,
-    },
-  ];
+  const [gallery, setGallery] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
+
+  const client = createClient({
+    space: "tqncsdbsgfia",
+    accessToken: "-9EwN0ildNJJx5JkXlF2kql-XkEx6uuThl7kelX7oLo",
+  });
+
+  useEffect(() => {
+    const getAllEntries = async () => {
+      try {
+        const entries = await client.getEntries({
+          content_type: "gallery", // Specify the content type
+        });
+        setGallery(entries.items);
+        console.log(entries.items);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getAllEntries();
+  }, []);
+
+  // Extract image URLs for lightbox navigation
+  const images = gallery.map(
+    (item) => item.fields.galleryImages.fields.file.url
+  );
+
   return (
     <div>
       <Navbar />
@@ -70,10 +44,10 @@ const Projects = () => {
           <div className="col-md-12">
             <div className="d-flex justify-content-between">
               <div>
-                <h1 className="text-black fw-3">Customers Interiors</h1>
-                <sup>click any of the images to enlarge for a bigger view.</sup>
+                <h1 className="text-black fw-bold">Customers Interiors</h1>
+                <sup>Click any of the images to enlarge for a bigger view.</sup>
               </div>
-              <div className="">
+              <div>
                 <sup>Custom Seats</sup>
                 <sup>Customer's Interior</sup>
                 <sup>Door Panels</sup>
@@ -81,17 +55,54 @@ const Projects = () => {
             </div>
           </div>
         </div>
-        
+
+        {/* Masonry Grid */}
         <div className="row mt-5">
-          <div className="col-md-6">
-            <div className="">
-              <ImageGallery items={images} />;
-            </div>
-          </div>
-          <div className="col-md-6"></div>
+          <ResponsiveMasonry
+            columnsCountBreakPoints={{ 350: 1, 768: 2, 992: 3 }}
+          >
+            <Masonry gutter="3px">
+              {gallery.map((item, index) => (
+                <article key={index} className="masonry-item">
+                  <img
+                    src={item.fields.galleryImages.fields.file.url}
+                    alt={`Project ${index + 1}`}
+                    style={{
+                      width: "100%",
+                      display: "block",
+                      borderRadius: "2px",
+                      // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setPhotoIndex(index);
+                      setIsOpen(true);
+                    }}
+                  />
+                </article>
+              ))}
+            </Masonry>
+          </ResponsiveMasonry>
         </div>
       </div>
+
       <Footer />
+
+      {/* Lightbox Component */}
+      {isOpen && (
+        <Lightbox
+          mainSrc={images[photoIndex]}
+          nextSrc={images[(photoIndex + 1) % images.length]}
+          prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+          onCloseRequest={() => setIsOpen(false)}
+          onMovePrevRequest={() =>
+            setPhotoIndex((photoIndex + images.length - 1) % images.length)
+          }
+          onMoveNextRequest={() =>
+            setPhotoIndex((photoIndex + 1) % images.length)
+          }
+        />
+      )}
     </div>
   );
 };

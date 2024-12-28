@@ -41,18 +41,9 @@ const Shop = () => {
           <div className="col-md-1"></div>
           <div className="col-md-7">
             <div className="video_box" style={{ borderRadius: "8px" }}>
+              
               <iframe
-                width="315"
-                height="560"
-                src="https://www.youtube.com/embed/nW1nHluVr9U"
-                title="workshop video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              ></iframe>
-              <iframe
-                width="315"
+                width="100%"
                 height="560"
                 src="https://www.youtube.com/embed/YELYkJkjtJY"
                 title="vid 01"

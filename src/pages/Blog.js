@@ -2,38 +2,34 @@ import React, { useEffect, useState } from "react";
 import { createClient } from "contentful";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 import axios from "axios";
 
 const Blog = () => {
   const [blogPosts, setBlogPosts] = useState([]);
-  const [hoveredImages, setHoveredImages] = useState({});
+
   const [openBlog, setOpenBlog] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
 
   const client = createClient({
-    space: "6u1ri8jhaa4q",
-    accessToken: "x3Mzc04F3uTEKcuUIjFm4w9L92LyvHWAUdME4Sgv_RA",
+    space: "tqncsdbsgfia",
+    accessToken: "WEdkqyKKllXL2NCYr8UOnE-EO_vKUWCWNTdbinUJGo0",
   });
 
   useEffect(() => {
     const getAllEntries = async () => {
       try {
-        const entries = await client.getEntries();
+        const entries = await client.getEntries({
+          content_type: "blog", // Specify the content type
+        });
         setBlogPosts(entries.items);
+        console.log(entries.items);
       } catch (error) {
         console.log(error);
       }
     };
     getAllEntries();
   }, [client]);
-
-  const handleMouseEnter = (id) => {
-    setHoveredImages((prevState) => ({ ...prevState, [id]: true }));
-  };
-
-  const handleMouseLeave = (id) => {
-    setHoveredImages((prevState) => ({ ...prevState, [id]: false }));
-  };
 
   const handleReadMore = (post) => {
     setSelectedBlog(post); // Set the selected blog post data
@@ -63,7 +59,6 @@ const Blog = () => {
       );
       setComments(response.data); // Assuming API returns an array of comments
       // console.log(response.data);
-      
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
@@ -97,6 +92,7 @@ const Blog = () => {
 
   return (
     <div>
+      <Navbar />
       <div className="container mt-5">
         <div style={{ width: "100%", height: "4.2em" }} className="">
           <div className="container">
@@ -124,20 +120,25 @@ const Blog = () => {
                     placeholder="search blog"
                     className="form-control"
                   />
-                  <button className="border">search</button>
+                  <button
+                    onClick={(e) => e.preventDefault()}
+                    className="border"
+                  >
+                    search
+                  </button>
                 </div>
               </form>
             </div>
             <div className="col-md-9">
               <div className="row mt-4">
-                {blogPosts.slice(0, 2).map((posts) => (
+                {blogPosts.slice(0, 4).map((posts) => (
                   <div key={posts.sys.id} className="col-md-3">
                     <div>
                       <img
                         onClick={() => handleReadMore(posts)}
                         className="cursor"
                         width="100%"
-                        src={`https:${posts.fields.blogImage[0].fields.file.url}`}
+                        src={`https:${posts.fields.blogImage.fields.file.url}`}
                         alt="products"
                         loading="lazy"
                       />
@@ -152,63 +153,24 @@ const Blog = () => {
             <div className="col-md-10">
               {blogPosts.map((posts, index) => (
                 <div key={posts.sys.id} className="row mt-5">
-                  {index % 2 === 0 ? (
-                    // Even index layout
-                    <>
-                      <div className="col-md-6">
-                        <img
-                          width="100%"
-                          src={`https:${
-                            hoveredImages[posts.sys.id]
-                              ? posts.fields.blogImage[1].fields.file.url
-                              : posts.fields.blogImage[0].fields.file.url
-                          }`}
-                          alt="products"
-                          loading="lazy"
-                          onMouseEnter={() => handleMouseEnter(posts.sys.id)}
-                          onMouseLeave={() => handleMouseLeave(posts.sys.id)}
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <h3>{posts.fields.blogName}</h3>
-                        <article>{posts.fields.blogDescription}</article>
-                        <button
-                          onClick={() => handleReadMore(posts)}
-                          className="btn btn-secondary btn-rounded mt-5"
-                        >
-                          Read more...
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    // Odd index layout
-                    <>
-                      <div className="col-md-6">
-                        <h3>{posts.fields.blogName}</h3>
-                        <article>{posts.fields.blogDescription}</article>
-                        <button
-                          onClick={() => handleReadMore(posts)}
-                          className="btn btn-secondary btn-rounded mt-5"
-                        >
-                          Read more...
-                        </button>
-                      </div>
-                      <div className="col-md-6">
-                        <img
-                          width="100%"
-                          src={`https:${
-                            hoveredImages[posts.sys.id]
-                              ? posts.fields.blogImage[1].fields.file.url
-                              : posts.fields.blogImage[0].fields.file.url
-                          }`}
-                          alt="products"
-                          loading="lazy"
-                          onMouseEnter={() => handleMouseEnter(posts.sys.id)}
-                          onMouseLeave={() => handleMouseLeave(posts.sys.id)}
-                        />
-                      </div>
-                    </>
-                  )}
+                  <div className="col-md-6">
+                    <img
+                      width="100%"
+                      src={`https:${posts.fields.blogImage.fields.file.url}`}
+                      alt="products"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <h3>{posts.fields.blogTitle}</h3>
+                    <article>{posts.fields.blogShortDescription}</article>
+                    <button
+                      onClick={() => handleReadMore(posts)}
+                      className="btn btn-secondary btn-rounded mt-5"
+                    >
+                      Read more...
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -241,9 +203,9 @@ const Blog = () => {
                   style={{ height: "33em" }}
                 >
                   <div className="container">
-                    <div className="row p-4">
+                    <div className="row p-4 mt-5">
                       <div className="col-md-12">
-                        <h3>{selectedBlog.fields.blogName}</h3>
+                        <h3>{selectedBlog.fields.blogTitle}</h3>
                       </div>
                     </div>
                     <div className="row">
@@ -252,12 +214,13 @@ const Blog = () => {
                         <div>
                           <img
                             width="100%"
-                            src={`https:${selectedBlog.fields.blogImage[0].fields.file.url}`}
+                            src={`https:${selectedBlog.fields.blogImage.fields.file.url}`}
                             alt="products"
                             loading="lazy"
                           />
                         </div>
-                        <p>{selectedBlog.fields.blogDescription}</p>
+
+                        <p>{selectedBlog.fields.blogFullDescription}</p>
                         <hr />
                         <div className="leave_comment">
                           <h3>Leave a comment here</h3>
@@ -272,7 +235,9 @@ const Blog = () => {
                                   </sub>
                                   <br />
                                   <small>{cmt.comment}</small>
-                                  <sup className="fw-bolder">{cmt.timestamp}</sup>
+                                  <sup className="fw-bolder">
+                                    {cmt.timestamp}
+                                  </sup>
                                   <hr style={{ width: "60%" }} />
                                 </div>
                               ))

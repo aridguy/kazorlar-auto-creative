@@ -7,17 +7,7 @@ import Aos from "aos";
 import { useNavigate } from "react-router-dom";
 // import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
-// import pics1 from "../assets/img/c.jpg";
-// import pics2 from "../assets/img/e.jpg";
-// import pics4 from "../assets/img/i.jpg";
-// import pics3 from "../assets/img/ii.jpg";
-// import pics5 from "../assets/img/j.jpg";
-// import pics6 from "../assets/img/k.jpg";
-// import pics7 from "../assets/img/l.jpg";
-// import pics8 from "../assets/img/m.jpg";
-// import pics9 from "../assets/img/n.jpg";
-// import pics10 from "../assets/img/o.jpg";
-// import pics11 from "../assets/img/p.jpg";
+
 import Marquee from "react-fast-marquee";
 import axios from "axios";
 
