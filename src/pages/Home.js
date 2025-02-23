@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import "../App.css";
-
 import Footer from "../components/Footer";
 import Aos from "aos";
 import { useNavigate } from "react-router-dom";
 // import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
-
+import HomePicss from "../assets/home-pics.jpg";
 import Marquee from "react-fast-marquee";
 import axios from "axios";
-
 const Home = () => {
   const navigate = useNavigate("/");
 
@@ -150,7 +148,8 @@ const Home = () => {
                       >
                         With over 10 years experience in auto upholstery, <br />{" "}
                         we will create, repair or upgrade your car, boat or{" "}
-                        <br /> motorcycle and Aircraft upholstery to be it’s very best.
+                        <br /> motorcycle and Aircraft upholstery to be it’s
+                        very best.
                       </sup>
                     </div>
                   </div>
@@ -195,8 +194,8 @@ const Home = () => {
         // WHY US?
         <div data-aos="fae-right" className="container-fluid">
           <div className="row mt-5">
-            <div className="col-md-2"></div>
-            <div className="col-md-8">
+            <div className="col-md-1"></div>
+            <div className="col-md-10">
               <div className="row">
                 <div className="col-md-9">
                   <div>
@@ -275,14 +274,15 @@ const Home = () => {
                     </button>
                   </div>
                 </div>
-
-                <div className="col-md-3"></div>
+                <div className="col-md-3">
+                  <img width="100" scr={HomePicss} alt="" />
+                </div>
               </div>
               <div className="row mt-4">
                 <div className=""></div>
               </div>
             </div>
-            <div className="col-md-2"></div>
+            <div className="col-md-1"></div>
           </div>
         </div>
       }
