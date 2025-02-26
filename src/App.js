@@ -13,6 +13,7 @@ import Shop from "./pages/Shop";
 import Appointment from "./pages/Appointment";
 import Projects from "./pages/Projects";
 import Blog from "./pages/Blog";
+import Gallery from "./pages/Gallery";
 
 function App() {
   
@@ -24,11 +25,11 @@ function App() {
             {/* Dashboard Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/appointment" element={<Appointment />} />
+            <Route path="/gallery" element={<Gallery />} />
             <Route path="/projects" element={<Projects />} />
             {/* Catch-all route redirects unknown paths to login */}
             <Route path="*" element={<Navigate to="/" replace />} />

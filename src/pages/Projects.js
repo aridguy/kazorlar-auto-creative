@@ -1,108 +1,92 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { createClient } from "contentful";
-import "react-image-lightbox/style.css";
-import Lightbox from "react-image-lightbox";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; 
+import { Carousel } from "react-responsive-carousel";
 
 const Projects = () => {
-  const [gallery, setGallery] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [photoIndex, setPhotoIndex] = useState(0);
+  const [projects, setProjects] = useState([]);
 
   const client = createClient({
-    space: "tqncsdbsgfia",
-    accessToken: "-9EwN0ildNJJx5JkXlF2kql-XkEx6uuThl7kelX7oLo",
+    space: process.env.REACT_APP_CONTENTFUL_SPACE,
+    accessToken: process.env.REACT_APP_CONTENTFUL_ACCESS_TOKEN,
   });
 
   useEffect(() => {
     const getAllEntries = async () => {
       try {
         const entries = await client.getEntries({
-          content_type: "gallery", // Specify the content type
+          content_type: "project",
         });
-        setGallery(entries.items);
-        // console.log(entries.items);
+        setProjects(entries.items);
       } catch (error) {
         console.error(error);
       }
     };
     getAllEntries();
-  }, [client]);
-
-  // Extract image URLs for lightbox navigation
-  const images = gallery.map(
-    (item) => item.fields.galleryImages.fields.file.url
-  );
+  }, []);
 
   return (
     <div>
       <Navbar />
       <div className="container mt-5 pt-5">
-        <div className="row">
-          <div className="col-md-12">
-            <div className="d-flex justify-content-between">
-              <div>
-                <h1 className="text-black fw-bold">Customers Interiors</h1>
-                <sup>Click any of the images to enlarge for a bigger view.</sup>
-              </div>
-              <div>
-                <sup>Custom Seats</sup>
-                <sup>Customer's Interior</sup>
-                <sup>Door Panels</sup>
-              </div>
-            </div>
-          </div>
-        </div>
+        <h1 className="text-black fw-bold text-center">Customers Interiors</h1>
+        <p className="text-center">
+          See images, before and after of different projects completed.
+        </p>
 
         {/* Masonry Grid */}
-        <div className="row mt-5">
-          <ResponsiveMasonry
-            columnsCountBreakPoints={{ 350: 1, 768: 2, 992: 3 }}
-          >
-            <Masonry gutter="3px">
-              {gallery.map((item, index) => (
-                <article key={index} className="masonry-item">
-                  <img
-                    src={item.fields.galleryImages.fields.file.url}
-                    alt={`Project ${index + 1}`}
-                    style={{
-                      width: "100%",
-                      display: "block",
-                      borderRadius: "2px",
-                      // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => {
-                      setPhotoIndex(index);
-                      setIsOpen(true);
-                    }}
-                  />
-                </article>
-              ))}
-            </Masonry>
-          </ResponsiveMasonry>
+        <div className="row mt-5" style={{ display: "flex", flexWrap: "wrap" }}>
+          {projects.map((project, index) => (
+            <div
+              className="col-md-4 d-flex justify-content-center"
+              key={project.sys.id || index}
+            >
+              <div className="project-card">
+                <Carousel showThumbs={true} thumbWidth={50}>
+                  {project.fields.carImages?.map((image, i) => (
+                    <div key={i} className="carousel-img-container">
+                      <img src={image.fields.file.url} alt={`car-${index}-${i}`} />
+                      <p className="legend">{project.fields.carName}</p>
+                    </div>
+                  ))}
+                </Carousel>
+                <p className="description">{project.fields.carDescriptions}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-
       <Footer />
-
-      {/* Lightbox Component */}
-      {isOpen && (
-        <Lightbox
-          mainSrc={images[photoIndex]}
-          nextSrc={images[(photoIndex + 1) % images.length]}
-          prevSrc={images[(photoIndex + images.length - 1) % images.length]}
-          onCloseRequest={() => setIsOpen(false)}
-          onMovePrevRequest={() =>
-            setPhotoIndex((photoIndex + images.length - 1) % images.length)
-          }
-          onMoveNextRequest={() =>
-            setPhotoIndex((photoIndex + 1) % images.length)
-          }
-        />
-      )}
+      
+      {/* Styling */}
+      <style jsx>{`
+        .project-card {
+          width: 100%;
+          max-width: 350px;
+          text-align: center;
+          padding: 10px;
+          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+          border-radius: 10px;
+          background-color: white;
+        }
+        .carousel-img-container img {
+          width: 100%;
+          height: 250px;
+          object-fit: cover;
+          border-radius: 8px;
+        }
+        .legend {
+          font-weight: bold;
+          font-size: 14px;
+        }
+        .description {
+          font-size: 14px;
+          color: #555;
+          margin-top: 5px;
+        }
+      `}</style>
     </div>
   );
 };

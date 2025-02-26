@@ -40,7 +40,7 @@ const Navbar = () => {
   };
 
   const openAppointment = () => setAppointment((prevState) => !prevState);
-  
+
 
 
   const [state, handleSubmit] = useForm("mqazjznb");
@@ -95,7 +95,12 @@ const Navbar = () => {
               </p>
             </li>
             <li className="navbar-item">
-              <p className="cursor" onClick={goToBlog }>
+              <p className="cursor" onClick={() => navigate("/gallery")}>
+                Gallery
+              </p>
+            </li>
+            <li className="navbar-item">
+              <p className="cursor" onClick={goToBlog}>
                 Blog
               </p>
             </li>
@@ -122,7 +127,7 @@ const Navbar = () => {
           &nbsp;
           <small>
             Welcome, <b className="text-info">{visitorName} 😎</b>
-           
+
           </small>
         </div>
       </nav>
