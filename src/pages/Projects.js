@@ -25,7 +25,7 @@ const Projects = () => {
       }
     };
     getAllEntries();
-  }, []);
+  }, [client]);
 
   return (
     <div>
