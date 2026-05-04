@@ -1,318 +1,235 @@
-// src/Navbar.js
 import React, { useEffect, useState } from "react";
-import "../App.css";
 import { useNavigate } from "react-router-dom";
-
 import Logo from "../assets/logo.jpg";
 import Swal from "sweetalert2";
 import Marquee from "react-fast-marquee";
 import AOS from "aos";
-import "aos/dist/aos.css"; // Import the AOS styles
+import "aos/dist/aos.css";
 import { useForm } from "@formspree/react";
+import "./Navbar.css"; // Unique CSS for navbar only
 
 const Navbar = () => {
   useEffect(() => {
     AOS.init({
-      duration: 1000, // Duration of the animation (in milliseconds)
-      once: true, // Whether animation should happen only once
-      mirror: false, // Whether elements should animate out while scrolling past them
+      duration: 1000,
+      once: true,
+      mirror: false,
     });
   }, []);
-  const navigate = useNavigate("/");
+
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [appointment, setAppointment] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const toggleNavbar = () => {
-    setIsOpen(!isOpen);
-  };
   const savedName = localStorage.getItem("userName");
   const [visitorName, setVisitorName] = useState(savedName);
+
   useEffect(() => {
-    // Load the name from localStorage when the component mounts
     const storedName = localStorage.getItem("userName");
     if (storedName) {
       setVisitorName(storedName);
     }
+
+    // Handle scroll effect
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const goToBlog = () => {
-    navigate("/blog")
-  };
+  // const goToBlog = () => {
+  //   navigate("/blog");
+  // };
 
-  const openAppointment = () => setAppointment((prevState) => !prevState);
-
-
+  const openAppointment = () => setAppointment(true);
+  const closeAppointment = () => setAppointment(false);
 
   const [state, handleSubmit] = useForm("mqazjznb");
 
   if (state.succeeded) {
     Swal.fire({
-      title: "Successful?",
-      text: "Appointment has been booked?",
-      icon: "question",
+      title: "Appointment Booked!",
+      text: "We'll contact you shortly to confirm.",
+      icon: "success",
     }).then((result) => {
       setAppointment(false);
     });
   }
 
   return (
-    <div>
-      <nav className="navbar">
-        <div
-          className="navbar-container py-2 px-2"
-          style={{ borderRight: "2px solid white" }}
-        >
-          <img
-            onClick={() => navigate("/")}
-            className="cursor"
-            width={50}
-            src={Logo}
-            alt="logo"
-          />
-          <button className="navbar-toggle" onClick={toggleNavbar}>
-            ☰
-          </button>{" "}
-          &nbsp;&nbsp;
-          <ul className={`navbar-menu lead ${isOpen ? "open" : ""}`}>
-            <li className="navbar-item">
-              <p className="cursor" onClick={() => navigate("/")}>
-                Home
-              </p>
+    <div className="navbar-wrapper">
+      <nav className={`navbar-custom ${scrolled ? "scrolled" : ""}`}>
+        <div className="navbar-container-custom">
+          <div className="navbar-logo" onClick={() => navigate("/")}>
+            <img src={Logo} alt="Kazorler Auto-Creative" />
+            <span className="logo-text">Kazorler Auto-Creative</span>
+          </div>
+
+          <button className="navbar-toggle-custom" onClick={() => setIsOpen(!isOpen)}>
+            <span className="hamburger-icon">☰</span>
+          </button>
+
+          <ul className={`navbar-menu-custom ${isOpen ? "open" : ""}`}>
+            <li className="navbar-item-custom text-white cursor">
+              <span onClick={() => navigate("/")}>Home</span>
             </li>
-            <li className="navbar-item">
-              <p className="cursor" onClick={() => navigate("/projects")}>
-                Projects
-              </p>
+            <li className="navbar-item-custom text-white cursor">
+              <span onClick={() => navigate("/projects")}>Projects</span>
             </li>
-            <li className="navbar-item">
-              <p className="cursor" onClick={() => navigate("/about")}>
-                About
-              </p>
+            <li className="navbar-item-custom text-white cursor">
+              <span onClick={() => navigate("/about")}>About</span>
             </li>
-            <li className="navbar-item">
-              <p className="cursor" onClick={() => navigate("/shop")}>
-                Work Shop
-              </p>
+            <li className="navbar-item-custom text-white cursor">
+              <span onClick={() => navigate("/shop")}>Shop</span>
             </li>
-            <li className="navbar-item">
-              <p className="cursor" onClick={() => navigate("/gallery")}>
-                Gallery
-              </p>
+            <li className="navbar-item-custom text-white cursor">
+              <span onClick={() => navigate("/gallery")}>Gallery</span>
             </li>
-            <li className="navbar-item">
-              <p className="cursor" onClick={goToBlog}>
-                Blog
-              </p>
+            {/* <li className="navbar-item-custom text-white cursor">
+              <span onClick={goToBlog}>Blog</span>
+            </li> */}
+            <li className="navbar-item-custom text-white cursor">
+              <span onClick={openAppointment}>Appointment</span>
             </li>
-            <li className="navbar-item">
-              <p className="cursor" onClick={() => openAppointment(true)}>
-                Appointment
-              </p>
-            </li>
-            <li className="navbar-item">
-              <p className="cursor" onClick={() => navigate("/contact")}>
-                Contact
-              </p>
+            <li className="navbar-item-custom text-white cursor">
+              <span onClick={() => navigate("/contact")}>Contact</span>
             </li>
           </ul>
-        </div>
-        <div>
-          <img
-            src="https://avatar.iran.liara.run/public"
-            className="rounded-circle cursor"
-            height="25"
-            alt="visitor icon_avater"
-            loading="lazy"
-          />{" "}
-          &nbsp;
-          <small>
-            Welcome, <b className="text-info">{visitorName} 😎</b>
 
-          </small>
+          <div className="navbar-user">
+            <div className="user-avatar">
+              {/* <img
+                src="https://avatar.iran.liara.run/public"
+                alt="avatar"
+              /> */}
+            </div>
+            <div className="user-info">
+              <span className="welcome-text">Welcome,</span>
+              <span className="user-name">{visitorName || "Guest"} 😎</span>
+            </div>
+          </div>
         </div>
       </nav>
+
+      {/* Appointment Modal */}
       {appointment && (
-        <div className="appointment_modal_parent pt-5">
-          <div data-aos="fade-up" className="container mt-1 pt-5">
-            <div className="row">
-              <div className="col-md-3"></div>
-              <div className="col-md-6">
-                <div className="appointment_form_bg p-3">
-                  <h3 className="text-center text-black">
-                    Book an Appointment!
-                  </h3>
-                  <hr />
-                  <div className="row">
-                    <div className="col-md-2"></div>
-                    <div className="col-md-8">
-                      <form onSubmit={handleSubmit}>
-                        <p>
-                          <sup>Name</sup>
-                          <input
-                            type="text"
-                            placeholder="name"
-                            name="name"
-                            className="form-control"
-                            required
-                          />
-                        </p>
-                        <p>
-                          <sup>Email</sup>
-                          <input
-                            type="email"
-                            placeholder="email"
-                            name="email"
-                            className="form-control"
-                            required
-                          />
-                        </p>
-                        <p>
-                          <sup>Phone</sup>
-                          <input
-                            className="form-control"
-                            type="number"
-                            name="number"
-                            placeholder="phone number"
-                            required
-                          />
-                        </p>
-                        <p>
-                          <sup>Choose Date</sup>
-                          <input
-                            className="form-control"
-                            type="date"
-                            name="date"
-                            required
-                          />
-                        </p>
-                        <p>
-                          <sup>Choose time</sup>
-                          <input
-                            className="form-control"
-                            type="time"
-                            name="time"
-                            required
-                          />
-                        </p>
-                        <p>
-                          <sup>Choose Service Needed</sup>
-                          <select
-                            className="form-control"
-                            name="service"
-                            required
-                          >
-                            <option value="" disabled selected>
-                              Choose
-                            </option>
-                            <optgroup label="Automotive Services">
-                              <option value="headliners">Headliners</option>
-                              <option value="vinyl-tops">Vinyl Tops</option>
-                              <option value="convertible-tops">
-                                Convertible Tops
-                              </option>
-                              <option value="car-upholstery-revamping">
-                                Car Upholstery Revamping
-                              </option>
-                              <option value="headlamp-polishing">
-                                Headlamp Polishing
-                              </option>
-                              <option value="auto-detailing">
-                                Auto Detailing
-                              </option>
-                            </optgroup>
-                            <optgroup label="Interior Repair & Restoration">
-                              <option value="vinyl-leather-repairs-dyeing">
-                                Vinyl & Leather Repairs & Dyeing
-                              </option>
-                              <option value="dashboard-repair">
-                                Dashboard Repair
-                              </option>
-                              <option value="carpets-rugs">Carpets/Rugs</option>
-                            </optgroup>
-                            <optgroup label="Furniture Upholstery">
-                              <option value="house-furniture">
-                                House Furniture
-                              </option>
-                              <option value="house-chairs">House Chairs</option>
-                              <option value="office-chairs">
-                                Office Chairs
-                              </option>
-                            </optgroup>
-                            <optgroup label="Specialty Services">
-                              <option value="boat-cushions">
-                                Boat Cushions
-                              </option>
-                              <option value="recreational-vehicles">
-                                Recreational Vehicles
-                              </option>
-                              <option value="motorcycle-seats">
-                                Motorcycle Seats
-                              </option>
-                              <option value="heavy-equipment-seats">
-                                Heavy Equipment Seats
-                              </option>
-                            </optgroup>
-                          </select>
-                        </p>
-                        <p>
-                          <sup>Description</sup>
-                          <textarea
-                            className="form-control"
-                            name="Service-Info"
-                            required
-                            placeholder="additional info"
-                          ></textarea>
-                        </p>
-                        <p>
-                          <sup>Address</sup>
-                          <input
-                            type="address"
-                            placeholder="Address"
-                            name="address"
-                            className="form-control"
-                          />
-                        </p>
-                        <p>
-                          <sup>Comment or special request</sup>
-                          <textarea
-                            className="form-control"
-                            name="special-request"
-                            placeholder="special request"
-                          ></textarea>
-                        </p>
-                        <p>
-                          <small className="lead">How to reach me!</small>
-                        </p>
-                        <p>
-                          <input type="checkbox" name="throughPhone" />
-                          &nbsp;&nbsp;
-                          <small>Phone</small> &nbsp;&nbsp;
-                          <input type="checkbox" name="throughEmail" />
-                          &nbsp;&nbsp;
-                          <small>Email Address</small>
-                        </p>
-                        <Marquee>
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          <p className="lead">
-                            Note that Kazorler Auto-Creative doesn't not save
-                            your personal information nor ask for your credit or
-                            debit card or banking information
-                          </p>
-                        </Marquee>
-                        <button
-                          className="border btn btn-info btn-block block"
-                          type="submit"
-                          disabled={state.submitting}
-                        >
-                          Book Now!
-                        </button>
-                      </form>
-                    </div>
-                    <div className="col-md-2"></div>
+        <div className="appointment-modal-overlay" onClick={closeAppointment}>
+          <div className="appointment-modal-container" data-aos="fade-up" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={closeAppointment}>×</button>
+            
+            <div className="appointment-form-wrapper">
+              <h2 className="appointment-title">Book an Appointment</h2>
+              <p className="appointment-subtitle">We'll get back to you within 24 hours</p>
+              
+              <form onSubmit={handleSubmit} className="appointment-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" name="name" placeholder="John Doe" required />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" name="email" placeholder="john@example.com" required />
                   </div>
                 </div>
-              </div>
-              <div className="col-md-3"></div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" name="number" placeholder="(555) 123-4567" required />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label>Address</label>
+                    <input type="text" name="address" placeholder="Your location" />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Preferred Date *</label>
+                    <input type="date" name="date" required />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label>Preferred Time *</label>
+                    <input type="time" name="time" required />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Service Needed *</label>
+                  <select name="service" required>
+                    <option value="" disabled selected>Select a service</option>
+                    <optgroup label="Automotive Services">
+                      <option value="headliners">Headliners</option>
+                      <option value="vinyl-tops">Vinyl Tops</option>
+                      <option value="convertible-tops">Convertible Tops</option>
+                      <option value="car-upholstery-revamping">Car Upholstery Revamping</option>
+                      <option value="headlamp-polishing">Headlamp Polishing</option>
+                      <option value="auto-detailing">Auto Detailing</option>
+                    </optgroup>
+                    <optgroup label="Interior Repair & Restoration">
+                      <option value="vinyl-leather-repairs-dyeing">Vinyl & Leather Repairs & Dyeing</option>
+                      <option value="dashboard-repair">Dashboard Repair</option>
+                      <option value="carpets-rugs">Carpets/Rugs</option>
+                    </optgroup>
+                    <optgroup label="Furniture Upholstery">
+                      <option value="house-furniture">House Furniture</option>
+                      <option value="house-chairs">House Chairs</option>
+                      <option value="office-chairs">Office Chairs</option>
+                    </optgroup>
+                    <optgroup label="Specialty Services">
+                      <option value="boat-cushions">Boat Cushions</option>
+                      <option value="recreational-vehicles">Recreational Vehicles</option>
+                      <option value="motorcycle-seats">Motorcycle Seats</option>
+                      <option value="heavy-equipment-seats">Heavy Equipment Seats</option>
+                    </optgroup>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Description</label>
+                  <textarea name="Service-Info" placeholder="Tell us about your project..." rows="3"></textarea>
+                </div>
+
+                <div className="form-group">
+                  <label>Special Request</label>
+                  <textarea name="special-request" placeholder="Any special requests or notes..." rows="2"></textarea>
+                </div>
+
+                <div className="form-group">
+                  <label>Preferred Contact Method</label>
+                  <div className="checkbox-group">
+                    <label className="checkbox-label">
+                      <input type="checkbox" name="throughPhone" /> Phone
+                    </label>
+                    <label className="checkbox-label">
+                      <input type="checkbox" name="throughEmail" /> Email
+                    </label>
+                  </div>
+                </div>
+
+                <div className="form-notice">
+                  <Marquee pauseOnHover gradient={false} speed={30}>
+                    <span className="notice-text">
+                      ⚠️ Note: Kazorler Auto-Creative does not save your personal information nor ask for credit/debit card or banking information
+                    </span>
+                  </Marquee>
+                </div>
+
+                <button type="submit" className="submit-btn" disabled={state.submitting}>
+                  {state.submitting ? "Booking..." : "Book Appointment"}
+                </button>
+              </form>
             </div>
           </div>
         </div>

@@ -1,377 +1,268 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import Navbar from "../components/Navbar";
-import "../App.css";
 import Footer from "../components/Footer";
-import Aos from "aos";
-import { useNavigate } from "react-router-dom";
-// import ImageGallery from "react-image-gallery";
-import "react-image-gallery/styles/css/image-gallery.css";
-import HomePicss from "../assets/home-pics.jpg";
-import Marquee from "react-fast-marquee";
-import axios from "axios";
+import "./Home.css";
+
 const Home = () => {
-  const navigate = useNavigate("/");
+  // const parallaxRef = useRef(null);
 
   useEffect(() => {
-    Aos.init({
-      duration: 1000, // Duration of the animation (in milliseconds)
-      once: true, // Whether animation should happen only once
-      mirror: false, // Whether elements should animate out while scrolling past them
-    });
-  }, []);
-
-  //   {
-  //     original: pics1,
-  //     thumbnail: pics1,
-  //   },
-  //   {
-  //     original: pics2,
-  //     thumbnail: pics2,
-  //   },
-  //   {
-  //     original: pics3,
-  //     thumbnail: pics3,
-  //   },
-  //   {
-  //     original: pics4,
-  //     thumbnail: pics4,
-  //   },
-  //   {
-  //     original: pics5,
-  //     thumbnail: pics5,
-  //   },
-  //   {
-  //     original: pics6,
-  //     thumbnail: pics6,
-  //   },
-  //   {
-  //     original: pics7,
-  //     thumbnail: pics7,
-  //   },
-  //   {
-  //     original: pics8,
-  //     thumbnail: pics8,
-  //   },
-  //   {
-  //     original: pics9,
-  //     thumbnail: pics9,
-  //   },
-  //   {
-  //     original: pics10,
-  //     thumbnail: pics10,
-  //   },
-  //   {
-  //     original: pics11,
-  //     thumbnail: pics11,
-  //   },
-  // ];
-  // const brandName = "Kazorler Auto-Creative";
-  const [openRegUser, setOpenRegUser] = useState(false);
-  useEffect(() => {
-    // Check if the modal has already been shown
-    const hasModalBeenShown = localStorage.getItem("hasModalBeenShown");
-
-    if (!hasModalBeenShown) {
-      // Set a timer to open the modal after 5 seconds
-      const timer = setTimeout(() => {
-        setOpenRegUser(true);
-        // Set the flag in localStorage to indicate the modal has been shown
-        localStorage.setItem("hasModalBeenShown", "true");
-      }, 5000); // Opens modal after 5 seconds
-
-      // Cleanup timer on component unmount
-      return () => clearTimeout(timer);
-    }
-  }, []);
-  const closePopModal = () => {
-    setOpenRegUser(false);
-  };
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-  });
-  const [responseMessage, setResponseMessage] = useState("");
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    axios
-      .post("https://sheetdb.io/api/v1/z21u1qydjrwpe", {
-        data: formData,
-      })
-      .then((response) => {
-        // console.log(response);
-        setResponseMessage("Form submitted successfully!");
-        localStorage.setItem("userName", formData.name);
-        setFormData({ name: "", email: "" }); // Reset form fields
-        setOpenRegUser(false);
-        navigate("/about");
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-        setResponseMessage("There was an error submitting the form.");
+    const handleParallax = () => {
+      const scrolled = window.pageYOffset;
+      const parallaxElements = document.querySelectorAll('.parallax-bg');
+      parallaxElements.forEach((el) => {
+        const speed = el.getAttribute('data-speed') || 0.5;
+        el.style.transform = `translateY(${scrolled * speed}px)`;
       });
-  };
+    };
+
+    window.addEventListener('scroll', handleParallax);
+    return () => window.removeEventListener('scroll', handleParallax);
+  }, []);
 
   return (
-    <div>
+    <div className="home-modern">
       <Navbar />
-
-      {
-        // HERO SECTION OF THE APPLICATION
-        <div>
-          <div className="container-fluid hero-bg mt-5 pt-2">
-            <div className="row mt-4">
-              <div className="col-md-12">
-                <div className="row">
-                  <div className="col-md-1"></div>
-                  <div className="col-md-8">
-                    <div className="mt-2">
-                      <h1
-                        data-aos="fade-right"
-                        className="text-uppercase text-white hero_text"
-                      >
-                        Quality & <br />
-                        Experience
-                      </h1>
-                      <sup
-                        data-aos="fade-right"
-                        data-aos-delay="1000"
-                        className="text-white lead"
-                      >
-                        With over 10 years experience in auto upholstery, <br />{" "}
-                        we will create, repair or upgrade your car, boat or{" "}
-                        <br /> motorcycle and Aircraft upholstery to be it’s
-                        very best.
-                      </sup>
-                    </div>
-                  </div>
-                  <div className="col-md-3"></div>
-                </div>
-              </div>
-            </div>
+      
+      {/* Hero Section - Full Screen with Parallax */}
+      <section className="hero-modern">
+        <div className="hero-modern-bg parallax-bg" data-speed="0.3"></div>
+        <div className="hero-modern-overlay"></div>
+        <div className="hero-modern-content">
+          <div className="hero-modern-badge">
+            <span className="badge-pulse">✦ EST. 2014</span>
           </div>
-          <div
-            data-aos="fade-right"
-            style={{ width: "100%", background: "black", height: "2em" }}
-            className="container-fluid extra"
-          >
-            <div className="container ">
-              <a
-                href="mailto:kazorlerauto-creative.com.ng"
-                style={{ fontSize: "14px" }}
-                className="mt-1 text-white cursor"
-              >
-                info@kazorlerauto-creative.com.ng
-              </a>
-              &nbsp;&nbsp;&nbsp;
-              <a
-                href="mailto:info@kazorlerauto-creative.com.ng"
-                style={{ fontSize: "14px" }}
-                className="mt-1 text-white cursor"
-              >
-                info@kazorlerauto-creative.com.ng
-              </a>
-              <a
-                href="tel:+2349075320025"
-                style={{ fontSize: "14px" }}
-                className="mt-1 float-end text-white"
-              >
-                Tel: +234 907 5320 025
-              </a>
+          <h1 className="hero-modern-title">
+            <span className="title-line">Redefining</span>
+            <span className="title-gradient">Upholstery</span>
+            <span className="title-line">Craftsmanship</span>
+          </h1>
+          <p className="hero-modern-subtitle">
+            Where traditional mastery meets cutting-edge design
+          </p>
+          <div className="hero-modern-buttons">
+            <button className="btn-primary-modern">
+              Explore Work <span>→</span>
+            </button>
+            <button className="btn-outline-modern">
+              Watch Showreel <span className="play-icon">▶</span>
+            </button>
+          </div>
+          <div className="hero-scroll-indicator">
+            <span>Scroll to explore</span>
+            <div className="scroll-mouse"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section - Glassmorphism */}
+      <section className="stats-modern">
+        <div className="container-modern">
+          <div className="stats-grid">
+            <div className="stat-card" data-aos="fade-up">
+              <div className="stat-number">20+</div>
+              <div className="stat-label">Years Excellence</div>
+              <div className="stat-line"></div>
+            </div>
+            <div className="stat-card" data-aos="fade-up" data-aos-delay="100">
+              <div className="stat-number">500+</div>
+              <div className="stat-label">Projects Completed</div>
+              <div className="stat-line"></div>
+            </div>
+            <div className="stat-card" data-aos="fade-up" data-aos-delay="200">
+              <div className="stat-number">100%</div>
+              <div className="stat-label">Client Satisfaction</div>
+              <div className="stat-line"></div>
+            </div>
+            <div className="stat-card" data-aos="fade-up" data-aos-delay="300">
+              <div className="stat-number">24/7</div>
+              <div className="stat-label">Support Available</div>
+              <div className="stat-line"></div>
             </div>
           </div>
         </div>
-      }
-      {
-        // WHY US?
-        <div data-aos="fae-right" className="container-fluid">
-          <div className="row mt-5">
-            <div className="col-md-1"></div>
-            <div className="col-md-10">
-              <div className="row">
-                <div className="col-md-9">
-                  <div>
-                    <h3 data-aos="fade-right">
-                      Automotive & Aircraft{" "}
-                      <span className="text-info">Upholstery Experts</span>
-                    </h3>
-                    <h4 data-aos="fade-right">
-                      Transforming Vehicles and Aircraft with Precision and
-                      Style
-                    </h4>
-                  </div>
-                  <div className="" data-aos="fade-left">
-                    <p className="lead">
-                      With over 10 years of experience in crafting exceptional
-                      upholstery solutions, our team of skilled artisans
-                      possesses a unique blend of traditional techniques and
-                      modern expertise.
-                    </p>
-                    <h5>Automotive Design</h5>
-                    <ul className="lead">
-                      <li>Custom upholstery for cars, trucks, SUVs, and RVs</li>
-                      <li>
-                        Expertise in automotive design and interior restoration
-                      </li>
-                      <li>
-                        Precision sewing and hand tool expertise for precise
-                        upholstery work
-                      </li>
-                      <li>Various finishing techniques for a polished look</li>
-                    </ul>
-                    <h5>Aircraft Upholstery</h5>
-                    <ul className="lead">
-                      <li>Custom upholstery for aircraft interiors</li>
-                      <li>
-                        Restoration and revitalization of existing aircraft
-                        upholstery
-                      </li>
-                      <li>
-                        Expertise in working with specialized aircraft materials
-                        and techniques
-                      </li>
-                      <li>
-                        Intricate buttoning details and precision sewing for
-                        upholstery
-                      </li>
-                    </ul>
-                    <h5>Our Promise</h5>
-                    <ul className="lead">
-                      <li>
-                        Unwavering commitment to exceptional quality standards
-                      </li>
-                      <li>Attention to detail for flawless execution</li>
-                      <li>
-                        Dedicated to bringing clients' ideas to life, exceeding
-                        expectations with every delivery
-                      </li>
-                    </ul>
-                    <h5>Why Choose Us?</h5>
-                    <ul className="lead">
-                      <li>Over 10 years of experience in upholstery</li>
-                      <li>Unique blend of traditional and modern techniques</li>
-                      <li>Exceptional quality standards</li>
-                      <li>Attention to detail and commitment to excellence</li>
-                    </ul>
-                    <p className="lead">
-                      Ready to experience the art of upholstery? Contact us
-                      today to discuss your project and let us bring your vision
-                      to life!
-                    </p>
-                    <button
-                      onClick={() => navigate("/contact")}
-                      className="btn btn-secondary"
-                    >
-                      Contact us Today!
-                    </button>
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <img width="100" scr={HomePicss} alt="" />
-                </div>
-              </div>
-              <div className="row mt-4">
-                <div className=""></div>
-              </div>
+      </section>
+
+      {/* Services Section - Modern Grid */}
+      <section className="services-modern">
+        <div className="container-modern">
+          <div className="section-header-modern">
+            <span className="section-tag">What We Do</span>
+            <h2 className="section-title-modern">
+              Precision <span className="gradient-text">Craftsmanship</span>
+              <br />For Every Surface
+            </h2>
+            <p className="section-subtitle-modern">
+              Specialized upholstery solutions that blend innovation with tradition
+            </p>
+          </div>
+
+          <div className="services-grid-modern">
+            <div className="service-card-modern" data-aos="fade-up">
+              <div className="service-icon">🚗</div>
+              <h3>Automotive Excellence</h3>
+              <p>Custom interiors, luxury finishes, and complete restoration</p>
+              <div className="service-hover-bg"></div>
             </div>
-            <div className="col-md-1"></div>
+            <div className="service-card-modern" data-aos="fade-up" data-aos-delay="100">
+              <div className="service-icon">🛋️</div>
+              <h3>Furniture Artistry</h3>
+              <p>Restoring heirlooms and creating modern masterpieces</p>
+              <div className="service-hover-bg"></div>
+            </div>
+            <div className="service-card-modern" data-aos="fade-up" data-aos-delay="200">
+              <div className="service-icon">⛵</div>
+              <h3>Marine Upholstery</h3>
+              <p>Weather-resistant luxury for your vessel</p>
+              <div className="service-hover-bg"></div>
+            </div>
+            <div className="service-card-modern" data-aos="fade-up" data-aos-delay="300">
+              <div className="service-icon">✈️</div>
+              <h3>Aviation Interiors</h3>
+              <p>Premium aircraft seating and cabin upholstery</p>
+              <div className="service-hover-bg"></div>
+            </div>
           </div>
         </div>
-      }
+      </section>
 
-      {
-        // for user modal
-        openRegUser && (
-          <div className="reg_modal pt-5">
-            <div className="container mt-1 pt-5">
-              <div className="row">
-                <div className="col-md-3"></div>
-                <div className="col-md-6">
-                  <div className="reg_modal_form_bg p-5 mt-5">
-                    <div className="row">
-                      <div className="col-md-7">
-                        <div>
-                          <h5 className=" fw-5 text-white">
-                            Subscribe to my newsletter and never miss my
-                            upcoming articles || continue on our platform as a
-                            guest
-                          </h5>
-                          <button
-                            onClick={closePopModal}
-                            className="btn btn-info"
-                          >
-                            Close
-                          </button>
-                        </div>
-                      </div>
-                      <div className="col-md-5">
-                        <div>
-                          <form onSubmit={handleSubmit}>
-                            <p>
-                              <input
-                                className="form-control"
-                                type="text"
-                                name="name"
-                                placeholder="Enter your name"
-                                required
-                                value={formData.name}
-                                onChange={handleChange}
-                              />
-                            </p>
-                            <p>
-                              <input
-                                className="form-control"
-                                type="email"
-                                name="email"
-                                placeholder="Enter your email"
-                                required
-                                value={formData.email}
-                                onChange={handleChange}
-                              />
-                            </p>
-                            <button
-                              type="submit"
-                              className="btn btn-success btn-block"
-                            >
-                              Continue
-                            </button>
-                            <Marquee>
-                              <sup className="text-white">
-                                ✌🤞🙌 Please note: Kazorler Auto-Creative does
-                                not collect or store your personal information,
-                                and we will never ask for your credit card,
-                                debit card, or banking details.
-                              </sup>
-                            </Marquee>
-                            {responseMessage && (
-                              <sup className="text-white">
-                                {responseMessage}
-                              </sup>
-                            )}
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+      {/* Parallax Showcase Section */}
+      <section className="showcase-modern">
+        <div className="showcase-bg parallax-bg" data-speed="0.2"></div>
+        <div className="container-modern">
+          <div className="showcase-content">
+            <div className="showcase-text" data-aos="fade-right">
+              <span className="section-tag light">Portfolio</span>
+              <h2>Where Vision <br/>Meets <span className="gradient-text">Execution</span></h2>
+              <p>Every project tells a story of transformation, precision, and passion for the craft.</p>
+              <button className="btn-primary-modern">View Full Portfolio →</button>
+            </div>
+            <div className="showcase-grid" data-aos="fade-left">
+              <div className="showcase-item">
+                <div className="showcase-img"></div>
+                <div className="showcase-overlay">
+                  <span>Luxury Car Interior revamping</span>
                 </div>
-                <div className="col-md-3"></div>
+              </div>
+              <div className="showcase-item">
+                <div className="showcase-img-2"></div>
+                <div className="showcase-overlay">
+                  <span>Antique Restoration</span>
+                </div>
               </div>
             </div>
           </div>
-        )
-      }
+        </div>
+      </section>
+
+      {/* Process Section - Timeline Style */}
+      <section className="process-modern">
+        <div className="container-modern">
+          <div className="section-header-modern">
+            <span className="section-tag">Our Process</span>
+            <h2 className="section-title-modern">From Concept <br/>To <span className="gradient-text">Creation</span></h2>
+          </div>
+
+          <div className="process-timeline">
+            <div className="process-step" data-aos="fade-up">
+              <div className="step-number">01</div>
+              <div className="step-content">
+                <h3>Consultation</h3>
+                <p>Understanding your vision and requirements</p>
+              </div>
+              <div className="step-line"></div>
+            </div>
+            <div className="process-step" data-aos="fade-up" data-aos-delay="100">
+              <div className="step-number">02</div>
+              <div className="step-content">
+                <h3>Material Selection</h3>
+                <p>Curating the finest fabrics and materials</p>
+              </div>
+              <div className="step-line"></div>
+            </div>
+            <div className="process-step" data-aos="fade-up" data-aos-delay="200">
+              <div className="step-number">03</div>
+              <div className="step-content">
+                <h3>Precision Crafting</h3>
+                <p>Master artisans bringing your vision to life</p>
+              </div>
+              <div className="step-line"></div>
+            </div>
+            <div className="process-step" data-aos="fade-up" data-aos-delay="300">
+              <div className="step-number">04</div>
+              <div className="step-content">
+                <h3>Quality Delivery</h3>
+                <p>Rigorous inspection and perfect finish</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials - Modern Carousel Style */}
+      {/* <section className="testimonials-modern">
+        <div className="container-modern">
+          <div className="testimonials-header">
+            <span className="section-tag">Testimonials</span>
+            <h2 className="section-title-modern">What Our <span className="gradient-text">Clients Say</span></h2>
+          </div>
+
+          <div className="testimonials-grid-modern">
+            <div className="testimonial-card-modern" data-aos="fade-up">
+              <div className="quote-icon">“</div>
+              <p className="testimonial-text">Absolutely transformed my classic car. The attention to detail is unmatched.</p>
+              <div className="testimonial-author">
+                <div className="author-avatar"></div>
+                <div>
+                  <h4>James Wilson</h4>
+                  <span>Classic Car Collector</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card-modern" data-aos="fade-up" data-aos-delay="100">
+              <div className="quote-icon">“</div>
+              <p className="testimonial-text">Professional, creative, and perfectionists. Couldn't be happier with my furniture!</p>
+              <div className="testimonial-author">
+                <div className="author-avatar"></div>
+                <div>
+                  <h4>Sarah Martinez</h4>
+                  <span>Interior Designer</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card-modern" data-aos="fade-up" data-aos-delay="200">
+              <div className="quote-icon">“</div>
+              <p className="testimonial-text">Best in the business. My boat interior looks better than when it was new.</p>
+              <div className="testimonial-author">
+                <div className="author-avatar"></div>
+                <div>
+                  <h4>David Chen</h4>
+                  <span>Boat Owner</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section> */}
+
+      {/* CTA Section - Bold */}
+      <section className="cta-modern">
+        <div className="cta-bg parallax-bg" data-speed="0.1"></div>
+        <div className="container-modern">
+          <div className="cta-content-modern" data-aos="zoom-in">
+            <h2>Ready to <span className="gradient-text">Transform</span> Your Piece?</h2>
+            <p>Let's discuss your project and create something extraordinary together</p>
+            <div className="cta-buttons">
+              <button className="btn-primary-modern btn-large">Get Free Quote</button>
+              <button className="btn-outline-modern btn-large">Call: +234 (701) 276-0072</button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </div>
   );
 };
-// reg_modal_form_bg
+
 export default Home;

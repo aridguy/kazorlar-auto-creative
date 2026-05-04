@@ -1,92 +1,205 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { createClient } from "contentful";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; 
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import "./Projects.css";
 
 const Projects = () => {
+  const [activeFilter, setActiveFilter] = useState("all");
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Initialize Contentful client
   const client = createClient({
-    space: process.env.REACT_APP_CONTENTFUL_SPACE,
-    accessToken: process.env.REACT_APP_CONTENTFUL_ACCESS_TOKEN,
+    space: process.env.REACT_APP_CONTENTFUL_SPACE_ID,
+    accessToken: process.env.REACT_APP_CONTENTFUL_ACCESS_TOKEN_PROJECT,
   });
 
+  // Fetch projects from Contentful
   useEffect(() => {
-    const getAllEntries = async () => {
+    const fetchProjects = async () => {
       try {
-        const entries = await client.getEntries({
+        setLoading(true);
+        const response = await client.getEntries({
           content_type: "project",
+          order: "-sys.createdAt",
         });
-        setProjects(entries.items);
-      } catch (error) {
-        console.error(error);
+        setProjects(response.items);
+        console.log(response.items);
+        
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching projects:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     };
-    getAllEntries();
-  }, [client]);
+
+    fetchProjects();
+  }, []);
+
+  // Extract unique categories from fetched projects
+  const categories = ["all", ...new Set(projects.map(project => project.fields?.category).filter(Boolean))];
+  
+  // Filter projects based on active category
+  const filteredProjects = activeFilter === "all" 
+    ? projects 
+    : projects.filter(project => project.fields?.category === activeFilter);
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="projects-page">
+        <Navbar />
+        <div className="projects-loader-container">
+          <div className="projects-loader"></div>
+          <p>Loading our projects...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="projects-page">
+        <Navbar />
+        <div className="projects-error-container">
+          <div className="projects-error-icon">⚠️</div>
+          <h2>Unable to Load Projects</h2>
+          <p>{error}</p>
+          <button className="projects-retry-btn" onClick={() => window.location.reload()}>
+            Try Again
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
-    <div>
+    <div className="projects-page">
       <Navbar />
-      <div className="container mt-5 pt-5">
-        <h1 className="text-black fw-bold text-center">Customers Interiors</h1>
-        <p className="text-center">
-          See images, before and after of different projects completed.
-        </p>
-
-        {/* Masonry Grid */}
-        <div className="row mt-5" style={{ display: "flex", flexWrap: "wrap" }}>
-          {projects.map((project, index) => (
-            <div
-              className="col-md-4 d-flex justify-content-center"
-              key={project.sys.id || index}
-            >
-              <div className="project-card">
-                <Carousel showThumbs={true} thumbWidth={50}>
-                  {project.fields.carImages?.map((image, i) => (
-                    <div key={i} className="carousel-img-container">
-                      <img src={image.fields.file.url} alt={`car-${index}-${i}`} />
-                      <p className="legend">{project.fields.carName}</p>
-                    </div>
-                  ))}
-                </Carousel>
-                <p className="description">{project.fields.carDescriptions}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <Footer />
       
-      {/* Styling */}
-      <style jsx>{`
-        .project-card {
-          width: 100%;
-          max-width: 350px;
-          text-align: center;
-          padding: 10px;
-          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-          border-radius: 10px;
-          background-color: white;
-        }
-        .carousel-img-container img {
-          width: 100%;
-          height: 250px;
-          object-fit: cover;
-          border-radius: 8px;
-        }
-        .legend {
-          font-weight: bold;
-          font-size: 14px;
-        }
-        .description {
-          font-size: 14px;
-          color: #555;
-          margin-top: 5px;
-        }
-      `}</style>
+      {/* Hero Section */}
+      <section className="projects-hero">
+        <div className="projects-hero-overlay"></div>
+        <div className="projects-hero-content">
+          <h1 className="projects-hero-title">Our Work</h1>
+          <p className="projects-hero-subtitle">
+            Explore our collection of transformations and restorations
+          </p>
+          <div className="projects-hero-stats">
+            <div className="projects-stat">
+              <span className="projects-stat-number">450+</span>
+              <span className="projects-stat-label">Projects</span>
+            </div>
+            <div className="projects-stat">
+              <span className="projects-stat-number">100%</span>
+              <span className="projects-stat-label">Satisfaction</span>
+            </div>
+            <div className="projects-stat">
+              <span className="projects-stat-number">20+</span>
+              <span className="projects-stat-label">Years Experience</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Filter Buttons */}
+      {categories.length > 1 && (
+        <div className="projects-filter-section">
+          <div className="projects-container">
+            <div className="projects-filter-wrapper">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  className={`projects-filter-btn ${activeFilter === category ? "active" : ""}`}
+                  onClick={() => setActiveFilter(category)}
+                >
+                  {category === "all" ? "All" : category.charAt(0).toUpperCase() + category.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Projects Grid */}
+      <section className="projects-grid-section">
+        <div className="projects-container">
+          {filteredProjects.length === 0 ? (
+            <div className="projects-empty">
+              <p>No projects found in this category.</p>
+            </div>
+          ) : (
+            <div className="projects-grid">
+              {filteredProjects.map((project) => (
+                <div key={project.sys.id} className="projects-card">
+                  <div className="projects-card-image-wrapper">
+                    {project.fields.projectImages && project.fields.projectImages.length > 0 ? (
+  <Carousel 
+    showThumbs={false} 
+    showStatus={false}
+    infiniteLoop
+    swipeable
+    emulateTouch
+  >
+    {project.fields.projectImages.map((image, idx) => (
+      <div key={idx} className="projects-carousel-slide">
+        <img 
+          src={`https:${image.fields.file.url}`}
+          alt={`${project.fields.projectTitle} - ${idx + 1}`}
+        />
+      </div>
+    ))}
+  </Carousel>
+) : (
+  <div className="projects-no-image">
+    <span>No image available</span>
+  </div>
+)}
+                    <div className="projects-card-category">
+                      {project.fields.category || "Featured"}
+                    </div>
+                  </div>
+                  <div className="projects-card-content">
+                    <h5 className="projects-card-title">{project.fields.projectTitle}</h5>
+                    <p className="projects-card-description">
+                      {project.fields.projectDescription?.substring(0, 120)}
+                      {project.fields.projectDescription?.length > 120 ? "..." : ""}
+                    </p>
+                    <button className="projects-card-btn">View Details →</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="projects-cta">
+        <div className="projects-container">
+          <div className="projects-cta-content">
+            <h2>Have a Project in Mind?</h2>
+            <p>Let's bring your vision to life with our expert craftsmanship</p>
+            <button 
+              className="projects-cta-btn"
+              onClick={() => window.location.href = "/contact"}
+            >
+              Request a Quote
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 };

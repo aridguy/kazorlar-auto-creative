@@ -1,143 +1,237 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { createClient } from "contentful";
 import { useForm, ValidationError } from "@formspree/react";
 import Swal from "sweetalert2";
+import "./Shop.css";
 
 const Shop = () => {
-
   const [state, handleSubmit] = useForm("xldrzykr");
+  const [videoUrl, setVideoUrl] = useState("https://www.youtube.com/embed/YELYkJkjtJY");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Initialize Contentful client
+  const client = createClient({
+    space: process.env.REACT_APP_CONTENTFUL_SPACE_ID,
+    accessToken: process.env.REACT_APP_CONTENTFUL_ACCESS_TOKEN_PROJECT,
+  });
+
+  // Fetch video URL from Contentful
+  useEffect(() => {
+    const fetchVideoUrl = async () => {
+      try {
+        setLoading(true);
+        const response = await client.getEntries({
+          content_type: "shopVideo", // Content type for shop video
+          limit: 1,
+        });
+        
+        if (response.items.length > 0) {
+          const videoField = response.items[0].fields;
+          if (videoField.videoUrl) {
+            setVideoUrl(videoField.videoUrl);
+          }
+        }
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching video URL:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVideoUrl();
+  }, []);
 
   if (state.succeeded) {
-    // console.log("Successfully sent mail");
     Swal.fire({
-      title: "Successful?",
-      text: "Message has been delivered!",
+      title: "Message Sent!",
+      text: "We'll get back to you within 24 hours",
       icon: "success",
+      confirmButtonColor: "#c8a87c",
     });
     setTimeout(() => {
-      window.location.reload(); // Reload the current page
+      window.location.reload();
     }, 3000);
   }
 
   return (
-    <div>
+    <div className="shop-page">
       <Navbar />
-      <div className="container-fluid mt-5 pt-5">
-        <div className="row">
-          <div className="col-md-12 text-center">
-            <h1 className="text-center text-info">
-              Welcome to Our <br /> Work Shop
-            </h1>
-            <sup className="text-black text-center lead">
-              Check out Kazorler Auto-creative workshop
-            </sup>
-          </div>
+
+      {/* Hero Section */}
+      <section className="shop-hero">
+        <div className="shop-hero-overlay"></div>
+        <div className="shop-hero-content">
+          <h1 className="shop-hero-title" data-aos="fade-up">
+            Our Workshop
+          </h1>
+          <p className="shop-hero-subtitle" data-aos="fade-up" data-aos-delay="200">
+            Where craftsmanship meets creativity
+          </p>
         </div>
-      </div>
+      </section>
 
-      <div className="container-fluid mt-5">
-        <div className="row">
-          <div className="col-md-1"></div>
-          <div className="col-md-7">
-            <div className="video_box" style={{ borderRadius: "8px" }}>
-              
-              <iframe
-                width="100%"
-                height="560"
-                src="https://www.youtube.com/embed/YELYkJkjtJY"
-                title="vid 01"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              ></iframe>
+      {/* Video & Contact Section */}
+      <section className="shop-main">
+        <div className="shop-container">
+          <div className="shop-grid">
+            {/* Video Section */}
+            <div className="shop-video-section">
+              <div className="shop-video-wrapper">
+                <div className="shop-video-label">
+                  <span>▶ Watch Our Craftsmanship</span>
+                </div>
+                {loading ? (
+                  <div className="shop-video-loader">
+                    <div className="loader"></div>
+                    <p>Loading video...</p>
+                  </div>
+                ) : error ? (
+                  <div className="shop-video-error">
+                    <p>Unable to load video</p>
+                    <iframe 
+                      width="100%" 
+                      height="560" 
+                      src="https://www.youtube.com/embed/YELYkJkjtJY" 
+                      title="Fallback Video" 
+                      frameBorder="0" 
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                      referrerPolicy="strict-origin-when-cross-origin" 
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                ) : (
+                  <iframe 
+                    width="100%" 
+                    height="560" 
+                    src={videoUrl} 
+                    title="Workshop Video" 
+                    frameBorder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerPolicy="strict-origin-when-cross-origin" 
+                    allowFullScreen
+                  ></iframe>
+                )}
+              </div>
+
+              <div className="shop-features">
+                <h3>Why Visit Our Workshop?</h3>
+                <div className="shop-features-grid">
+                  <div className="shop-feature-item">
+                    <span className="shop-feature-icon">🔧</span>
+                    <div>
+                      <h4>State-of-the-art Equipment</h4>
+                      <p>Modern tools for precision work</p>
+                    </div>
+                  </div>
+                  <div className="shop-feature-item">
+                    <span className="shop-feature-icon">👨‍🔧</span>
+                    <div>
+                      <h4>Expert Craftsmen</h4>
+                      <p>Skilled professionals at work</p>
+                    </div>
+                  </div>
+                  <div className="shop-feature-item">
+                    <span className="shop-feature-icon">✨</span>
+                    <div>
+                      <h4>Quality Materials</h4>
+                      <p>Premium fabrics and leathers</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div className="col-md-3">
-            <p className="lead text-secondary">Get in Touch!</p>
-            <div>
-              <form onSubmit={handleSubmit}>
-                <p>
-                  <input
-                    id="name"
-                    className="form-control"
-                    name="name" // Ensure it matches with the ValidationError field
-                    type="text"
-                    placeholder="Name"
-                    required
-                  />
-                  <ValidationError
-                    prefix="Name"
-                    field="name"
-                    errors={state.errors}
-                  />
+            {/* Contact Form Section */}
+            <div className="shop-contact-section">
+              <div className="shop-contact-card">
+                <h3 className="shop-contact-title">Get in Touch</h3>
+                <p className="shop-contact-subtitle">
+                  Have questions? We'd love to hear from you
                 </p>
 
-                <p>
-                  <input
-                    id="email"
-                    className="form-control"
-                    name="email" // Ensure it matches with the ValidationError field
-                    type="email"
-                    placeholder="Email"
-                    required
-                  />
-                  <ValidationError
-                    prefix="Email"
-                    field="email"
-                    errors={state.errors}
-                  />
-                </p>
+                <form onSubmit={handleSubmit} className="shop-form">
+                  <div className="shop-form-group">
+                    <label htmlFor="name">Full Name *</label>
+                    <input
+                      id="name"
+                      className="shop-form-input"
+                      name="name"
+                      type="text"
+                      placeholder="John Doe"
+                      required
+                    />
+                    <ValidationError
+                      prefix="Name"
+                      field="name"
+                      errors={state.errors}
+                    />
+                  </div>
 
-                <p>
-                  <textarea
-                    name="message" // Ensure it matches with the ValidationError field
-                    id="message"
-                    style={{ minHeight: "30vh" }}
-                    className="form-control"
-                    placeholder="Leave a message . . ."
-                    required
-                  ></textarea>
-                  <ValidationError
-                    prefix="Message"
-                    field="message"
-                    errors={state.errors}
-                  />
-                </p>
+                  <div className="shop-form-group">
+                    <label htmlFor="email">Email Address *</label>
+                    <input
+                      id="email"
+                      className="shop-form-input"
+                      name="email"
+                      type="email"
+                      placeholder="john@example.com"
+                      required
+                    />
+                    <ValidationError
+                      prefix="Email"
+                      field="email"
+                      errors={state.errors}
+                    />
+                  </div>
 
-                <p>
+                  <div className="shop-form-group">
+                    <label htmlFor="message">Message *</label>
+                    <textarea
+                      name="message"
+                      id="message"
+                      className="shop-form-textarea"
+                      placeholder="Tell us about your project or questions..."
+                      rows="5"
+                      required
+                    ></textarea>
+                    <ValidationError
+                      prefix="Message"
+                      field="message"
+                      errors={state.errors}
+                    />
+                  </div>
+
                   <button
                     type="submit"
                     disabled={state.submitting}
-                    className="btn btn-secondary text-black text-uppercase"
+                    className="shop-submit-btn"
                   >
-                    Send
+                    {state.submitting ? "Sending..." : "Send Message"}
                   </button>
-                </p>
-              </form>
-            </div>
-          </div>
-
-          <div className="col-md-1"></div>
-        </div>
-      </div>
-
-      <div className="container mt-5">
-        <div className="row">
-          <div className="col-md-12">
-            <div className="d-flex gap-5 text-center">
-              <h2 className="text-black">
-                Want to talk to the upholstery experts?
-              </h2>
-              <button className="btn btn-secondary text-black text-uppercase">
-                Get in Touch
-              </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="shop-cta">
+        <div className="shop-container">
+          <div className="shop-cta-content">
+            <h2>Ready to Transform Your Furniture?</h2>
+            <p>Speak directly with our upholstery experts</p>
+            <button className="shop-cta-btn" onClick={() => document.querySelector('.shop-contact-card').scrollIntoView({ behavior: 'smooth' })}>
+              Get in Touch Today
+            </button>
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </div>
