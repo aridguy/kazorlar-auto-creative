@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { createClient } from "contentful";
@@ -12,7 +12,7 @@ const Projects = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Initialize Contentful client
+  // Initialize Contentful client outside of useEffect
   const client = createClient({
     space: process.env.REACT_APP_CONTENTFUL_SPACE_ID,
     accessToken: process.env.REACT_APP_CONTENTFUL_ACCESS_TOKEN_PROJECT,
@@ -28,11 +28,11 @@ const Projects = () => {
           order: "-sys.createdAt",
         });
         setProjects(response.items);
-        console.log(response.items);
-        
+        console.log("✅ Projects fetched:", response.items.length);
+        console.log("📦 Project data:", response.items);
         setError(null);
       } catch (err) {
-        console.error("Error fetching projects:", err);
+        console.error("❌ Error fetching projects:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -40,7 +40,7 @@ const Projects = () => {
     };
 
     fetchProjects();
-  }, []);
+  }, []); // Empty dependency array - client is stable
 
   // Extract unique categories from fetched projects
   const categories = ["all", ...new Set(projects.map(project => project.fields?.category).filter(Boolean))];
@@ -143,27 +143,30 @@ const Projects = () => {
                 <div key={project.sys.id} className="projects-card">
                   <div className="projects-card-image-wrapper">
                     {project.fields.projectImages && project.fields.projectImages.length > 0 ? (
-  <Carousel 
-    showThumbs={false} 
-    showStatus={false}
-    infiniteLoop
-    swipeable
-    emulateTouch
-  >
-    {project.fields.projectImages.map((image, idx) => (
-      <div key={idx} className="projects-carousel-slide">
-        <img 
-          src={`https:${image.fields.file.url}`}
-          alt={`${project.fields.projectTitle} - ${idx + 1}`}
-        />
-      </div>
-    ))}
-  </Carousel>
-) : (
-  <div className="projects-no-image">
-    <span>No image available</span>
-  </div>
-)}
+                      <Carousel 
+                        showThumbs={false} 
+                        showStatus={false}
+                        infiniteLoop
+                        swipeable
+                        emulateTouch
+                      >
+                        {project.fields.projectImages.map((image, idx) => (
+                          <div key={idx} className="projects-carousel-slide">
+                            <img 
+                              src={image.fields.file.url}
+                              alt={`${project.fields.projectTitle} - ${idx + 1}`}
+                              onError={(e) => {
+                                e.target.src = "https://via.placeholder.com/400x300?text=Image+Not+Found";
+                              }}
+                            />
+                          </div>
+                        ))}
+                      </Carousel>
+                    ) : (
+                      <div className="projects-no-image">
+                        <span>No image available</span>
+                      </div>
+                    )}
                     <div className="projects-card-category">
                       {project.fields.category || "Featured"}
                     </div>

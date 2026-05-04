@@ -167,7 +167,7 @@ const Navbar = () => {
 
                 <div className="form-group">
                   <label>Service Needed *</label>
-                  <select name="service" required>
+                  <select className="text-black" name="service" required>
                     <option value="" disabled selected>Select a service</option>
                     <optgroup label="Automotive Services">
                       <option value="headliners">Headliners</option>

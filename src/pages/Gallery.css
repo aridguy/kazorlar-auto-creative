@@ -42,7 +42,7 @@
   left: -20%;
   width: 140%;
   height: 140%;
-  background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3');
+  background-image: url('../assets/pics/gallerjy-hero.jpeg');
   background-size: cover;
   background-position: center;
   filter: brightness(0.3) contrast(1.2);
