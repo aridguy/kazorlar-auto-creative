@@ -1,51 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { createClient } from "contentful";
 import { useForm, ValidationError } from "@formspree/react";
 import Swal from "sweetalert2";
 import "./Shop.css";
 
+// Import your video file - change this path to your actual video location
+import workshopVideo from "../assets/shop.mp4";
+
 const Shop = () => {
   const [state, handleSubmit] = useForm("xldrzykr");
-  const [videoUrl, setVideoUrl] = useState("https://www.youtube.com/embed/YELYkJkjtJY");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // Initialize Contentful client
-  const client = createClient({
-    space: process.env.REACT_APP_CONTENTFUL_SPACE_ID,
-    accessToken: process.env.REACT_APP_CONTENTFUL_ACCESS_TOKEN_PROJECT,
-  });
-
-  // Fetch video URL from Contentful
-  useEffect(() => {
-    const fetchVideoUrl = async () => {
-      try {
-        setLoading(true);
-        const response = await client.getEntries({
-          content_type: "shopVideo", // Content type for shop video
-          limit: 1,
-        });
-        
-        if (response.items.length > 0) {
-          const videoField = response.items[0].fields;
-          if (videoField.videoUrl) {
-            setVideoUrl(videoField.videoUrl);
-          }
-        }
-        setError(null);
-      } catch (err) {
-        console.error("Error fetching video URL:", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchVideoUrl();
-  }, []);
-
+  // Success alert
   if (state.succeeded) {
     Swal.fire({
       title: "Message Sent!",
@@ -75,49 +41,37 @@ const Shop = () => {
         </div>
       </section>
 
-      {/* Video & Contact Section */}
+      {/* Main Content */}
       <section className="shop-main">
         <div className="shop-container">
           <div className="shop-grid">
-            {/* Video Section */}
+
+            {/* Video Section - Using HTML5 Video Tag */}
             <div className="shop-video-section">
               <div className="shop-video-wrapper">
                 <div className="shop-video-label">
                   <span>▶ Watch Our Craftsmanship</span>
                 </div>
-                {loading ? (
-                  <div className="shop-video-loader">
-                    <div className="loader"></div>
-                    <p>Loading video...</p>
-                  </div>
-                ) : error ? (
-                  <div className="shop-video-error">
-                    <p>Unable to load video</p>
-                    <iframe 
-                      width="100%" 
-                      height="560" 
-                      src="https://www.youtube.com/embed/YELYkJkjtJY" 
-                      title="Fallback Video" 
-                      frameBorder="0" 
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                      referrerPolicy="strict-origin-when-cross-origin" 
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                ) : (
-                  <iframe 
-                    width="100%" 
-                    height="560" 
-                    src={videoUrl} 
-                    title="Workshop Video" 
-                    frameBorder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    referrerPolicy="strict-origin-when-cross-origin" 
-                    allowFullScreen
-                  ></iframe>
-                )}
+                
+                <video
+                  controls
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '0 0 12px 12px',
+                    display: 'block'
+                  }}
+                >
+                  <source src={workshopVideo} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
 
+              {/* Features */}
               <div className="shop-features">
                 <h3>Why Visit Our Workshop?</h3>
                 <div className="shop-features-grid">
@@ -146,7 +100,7 @@ const Shop = () => {
               </div>
             </div>
 
-            {/* Contact Form Section */}
+            {/* Contact Form */}
             <div className="shop-contact-section">
               <div className="shop-contact-card">
                 <h3 className="shop-contact-title">Get in Touch</h3>
@@ -165,11 +119,7 @@ const Shop = () => {
                       placeholder="John Doe"
                       required
                     />
-                    <ValidationError
-                      prefix="Name"
-                      field="name"
-                      errors={state.errors}
-                    />
+                    <ValidationError prefix="Name" field="name" errors={state.errors} />
                   </div>
 
                   <div className="shop-form-group">
@@ -182,11 +132,7 @@ const Shop = () => {
                       placeholder="john@example.com"
                       required
                     />
-                    <ValidationError
-                      prefix="Email"
-                      field="email"
-                      errors={state.errors}
-                    />
+                    <ValidationError prefix="Email" field="email" errors={state.errors} />
                   </div>
 
                   <div className="shop-form-group">
@@ -199,18 +145,10 @@ const Shop = () => {
                       rows="5"
                       required
                     ></textarea>
-                    <ValidationError
-                      prefix="Message"
-                      field="message"
-                      errors={state.errors}
-                    />
+                    <ValidationError prefix="Message" field="message" errors={state.errors} />
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={state.submitting}
-                    className="shop-submit-btn"
-                  >
+                  <button type="submit" disabled={state.submitting} className="shop-submit-btn">
                     {state.submitting ? "Sending..." : "Send Message"}
                   </button>
                 </form>
@@ -226,7 +164,10 @@ const Shop = () => {
           <div className="shop-cta-content">
             <h2>Ready to Transform Your Furniture?</h2>
             <p>Speak directly with our upholstery experts</p>
-            <button className="shop-cta-btn" onClick={() => document.querySelector('.shop-contact-card').scrollIntoView({ behavior: 'smooth' })}>
+            <button 
+              className="shop-cta-btn" 
+              onClick={() => document.querySelector('.shop-contact-card').scrollIntoView({ behavior: 'smooth' })}
+            >
               Get in Touch Today
             </button>
           </div>
