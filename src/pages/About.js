@@ -5,8 +5,10 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "./About.css";
 import AboutImg from "../assets/pics/about.jpg";
+import { useNavigate } from "react-router-dom";
 
 const About = () => {
+  const Navigate = useNavigate();
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -224,7 +226,7 @@ const About = () => {
             <h2>Ready to Transform Your Furniture?</h2>
             <p>Let's discuss your project and bring your vision to life</p>
             <div className="about-cta-buttons">
-              <button className="about-cta-btn-primary">Get a Free Quote</button>
+              <button onClick={() => Navigate("contact")} className="about-cta-btn-primary">Get a Free Quote</button>
               <button className="about-cta-btn-secondary">Call Us: (555) 123-4567</button>
             </div>
           </div>

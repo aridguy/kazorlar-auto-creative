@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { createClient } from "contentful";
-import { useForm, ValidationError } from "@formspree/react";
-import Swal from "sweetalert2";
-import "./Shop.css";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import "react-image-lightbox/style.css";
+import Lightbox from "react-image-lightbox";
+import "./Gallery.css";
 
-const Shop = () => {
-  const [state, handleSubmit] = useForm("xldrzykr");
-  const [videoUrl, setVideoUrl] = useState("");
+const Gallery = () => {
+  const [gallery, setGallery] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [activeCategory, setActiveCategory] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Initialize Contentful client
   const client = createClient({
@@ -17,207 +21,206 @@ const Shop = () => {
     accessToken: process.env.REACT_APP_CONTENTFUL_ACCESS_TOKEN_PROJECT,
   });
 
-  // Fetch video URL from Contentful
+  // Fetch gallery from Contentful
   useEffect(() => {
-    const fetchVideo = async () => {
+    const fetchGallery = async () => {
       try {
-        console.log("🔄 Fetching video from Contentful...");
+        setLoading(true);
+        console.log("🔄 Fetching gallery from Contentful...");
+        console.log("Space ID:", process.env.REACT_APP_CONTENTFUL_SPACE_ID);
         
         const response = await client.getEntries({
-          content_type: "shop",
-          limit: 1,
+          content_type: "gallery",
+          order: "-sys.createdAt",
         });
         
-        console.log("📦 Full Response:", response);
-        console.log("📊 Items count:", response.items.length);
+        console.log("✅ Gallery fetched successfully!");
+        console.log("📊 Total gallery items:", response.items.length);
+        console.log("📦 Full response:", response);
         
-        if (response.items.length > 0) {
-          const videoField = response.items[0].fields;
-          console.log("🔍 Fields:", videoField);
-          console.log("🎥 Video URL field:", videoField.videoUrl);
-          
-          setVideoUrl(videoField.videoUrl);
-        } else {
-          console.log("⚠️ No workshop content found");
-        }
-        
-      } catch (error) {
-        console.error("❌ Error:", error);
+        setGallery(response.items);
+        setError(null);
+      } catch (err) {
+        console.error("❌ Error fetching gallery:", err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-    
-    fetchVideo();
+
+    fetchGallery();
   }, []);
 
-  // Success alert
-  if (state.succeeded) {
-    Swal.fire({
-      title: "Message Sent!",
-      text: "We'll get back to you within 24 hours",
-      icon: "success",
-      confirmButtonColor: "#c8a87c",
-    });
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000);
+  // Extract unique categories from fetched gallery items
+  const categories = ["all", ...new Set(gallery.map(item => item.fields?.category).filter(Boolean))];
+  
+  const filteredGallery = activeCategory === "all" 
+    ? gallery 
+    : gallery.filter(item => item.fields?.category === activeCategory);
+
+  const images = filteredGallery.map(
+    (item) => item.fields?.image?.fields?.file?.url || item.fields?.galleryImages?.fields?.file?.url
+  ).filter(Boolean);
+
+  if (loading) {
+    return (
+      <div className="gallery-page">
+        <Navbar />
+        <div className="gallery-loader-container">
+          <div className="gallery-loader"></div>
+          <p>Loading our gallery...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="gallery-page">
+        <Navbar />
+        <div className="gallery-error-container">
+          <div className="gallery-error-icon">⚠️</div>
+          <h2>Unable to Load Gallery</h2>
+          <p>{error}</p>
+          <button className="gallery-retry-btn" onClick={() => window.location.reload()}>
+            Try Again
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
   }
 
   return (
-    <div className="shop-page">
+    <div className="gallery-page">
       <Navbar />
-
+      
       {/* Hero Section */}
-      <section className="shop-hero">
-        <div className="shop-hero-overlay"></div>
-        <div className="shop-hero-content">
-          <h1 className="shop-hero-title" data-aos="fade-up">
-            Our Workshop
+      <section className="gallery-hero">
+        <div className="gallery-hero-overlay"></div>
+        <div className="gallery-hero-content">
+          <h1 className="gallery-hero-title" data-aos="fade-up">
+            Our Gallery
           </h1>
-          <p className="shop-hero-subtitle" data-aos="fade-up" data-aos-delay="200">
-            Where craftsmanship meets creativity
+          <p className="gallery-hero-subtitle" data-aos="fade-up" data-aos-delay="200">
+            Explore our collection of transformations and restorations
           </p>
         </div>
       </section>
 
-      {/* Main Content */}
-      <section className="shop-main">
-        <div className="shop-container">
-          <div className="shop-grid">
-
-            {/* Video Section */}
-            <div className="shop-video-section">
-              <div className="shop-video-wrapper">
-                <div className="shop-video-label">
-                  <span>▶ Watch Our Craftsmanship</span>
-                </div>
-                
-                {loading ? (
-                  <div className="shop-video-loader">
-                    <div className="loader"></div>
-                    <p>Loading video...</p>
-                  </div>
-                ) : (
-                  <iframe
-                    width="100%"
-                    height="560"
-                    src={videoUrl || "https://www.youtube.com/embed/YELYkJkjtJY"}
-                    title="Workshop Video"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allowFullScreen
-                  ></iframe>
-                )}
-              </div>
-
-              {/* Features */}
-              <div className="shop-features">
-                <h3>Why Visit Our Workshop?</h3>
-                <div className="shop-features-grid">
-                  <div className="shop-feature-item">
-                    <span className="shop-feature-icon">🔧</span>
-                    <div>
-                      <h4>State-of-the-art Equipment</h4>
-                      <p>Modern tools for precision work</p>
-                    </div>
-                  </div>
-                  <div className="shop-feature-item">
-                    <span className="shop-feature-icon">👨‍🔧</span>
-                    <div>
-                      <h4>Expert Craftsmen</h4>
-                      <p>Skilled professionals at work</p>
-                    </div>
-                  </div>
-                  <div className="shop-feature-item">
-                    <span className="shop-feature-icon">✨</span>
-                    <div>
-                      <h4>Quality Materials</h4>
-                      <p>Premium fabrics and leathers</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Contact Form */}
-            <div className="shop-contact-section">
-              <div className="shop-contact-card">
-                <h3 className="shop-contact-title">Get in Touch</h3>
-                <p className="shop-contact-subtitle">
-                  Have questions? We'd love to hear from you
-                </p>
-
-                <form onSubmit={handleSubmit} className="shop-form">
-                  <div className="shop-form-group">
-                    <label htmlFor="name">Full Name *</label>
-                    <input
-                      id="name"
-                      className="shop-form-input"
-                      name="name"
-                      type="text"
-                      placeholder="John Doe"
-                      required
-                    />
-                    <ValidationError prefix="Name" field="name" errors={state.errors} />
-                  </div>
-
-                  <div className="shop-form-group">
-                    <label htmlFor="email">Email Address *</label>
-                    <input
-                      id="email"
-                      className="shop-form-input"
-                      name="email"
-                      type="email"
-                      placeholder="john@example.com"
-                      required
-                    />
-                    <ValidationError prefix="Email" field="email" errors={state.errors} />
-                  </div>
-
-                  <div className="shop-form-group">
-                    <label htmlFor="message">Message *</label>
-                    <textarea
-                      name="message"
-                      id="message"
-                      className="shop-form-textarea"
-                      placeholder="Tell us about your project or questions..."
-                      rows="5"
-                      required
-                    ></textarea>
-                    <ValidationError prefix="Message" field="message" errors={state.errors} />
-                  </div>
-
-                  <button type="submit" disabled={state.submitting} className="shop-submit-btn">
-                    {state.submitting ? "Sending..." : "Send Message"}
-                  </button>
-                </form>
-              </div>
+      {/* Filter Section */}
+      {categories.length > 1 && (
+        <div className="gallery-filter-section">
+          <div className="gallery-container">
+            <div className="gallery-filter-wrapper">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  className={`gallery-filter-btn ${activeCategory === category ? "active" : ""}`}
+                  onClick={() => setActiveCategory(category)}
+                >
+                  {category === "all" ? "All" : category.charAt(0).toUpperCase() + category.slice(1)}
+                </button>
+              ))}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Gallery Grid */}
+      <section className="gallery-grid-section">
+        <div className="gallery-container">
+          <div className="gallery-stats">
+            <p>{filteredGallery.length} photos • Click any image to enlarge</p>
+          </div>
+          
+          {filteredGallery.length === 0 ? (
+            <div className="gallery-empty">
+              <p>No images found in this category.</p>
+            </div>
+          ) : (
+            <ResponsiveMasonry
+              columnsCountBreakPoints={{ 350: 1, 576: 2, 768: 3, 992: 4 }}
+            >
+              <Masonry gutter="20px">
+                {filteredGallery.map((item, index) => {
+                  const imageUrl = item.fields?.image?.fields?.file?.url || item.fields?.galleryImages?.fields?.file?.url;
+                  const title = item.fields?.title || `Gallery ${index + 1}`;
+                  const category = item.fields?.category || "Upholstery";
+                  
+                  return (
+                    <div 
+                      key={item.sys.id || index} 
+                      className="gallery-item"
+                      onClick={() => {
+                        setPhotoIndex(index);
+                        setIsOpen(true);
+                      }}
+                    >
+                      <div className="gallery-image-wrapper">
+                        <img
+                          src={imageUrl}
+                          alt={title}
+                          loading="lazy"
+                          onError={(e) => {
+                            e.target.src = "https://via.placeholder.com/400x300?text=Image+Not+Found";
+                          }}
+                        />
+                        <div className="gallery-overlay">
+                          <div className="gallery-overlay-content">
+                            <span className="gallery-overlay-icon">🔍</span>
+                            <p className="gallery-overlay-title">{title}</p>
+                            <span className="gallery-overlay-category">{category}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </Masonry>
+            </ResponsiveMasonry>
+          )}
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="shop-cta">
-        <div className="shop-container">
-          <div className="shop-cta-content">
-            <h2>Ready to Transform Your Furniture?</h2>
-            <p>Speak directly with our upholstery experts</p>
+      <section className="gallery-cta">
+        <div className="gallery-container">
+          <div className="gallery-cta-content">
+            <h2>Inspired by Our Work?</h2>
+            <p>Let's create something beautiful for your space</p>
             <button 
-              className="shop-cta-btn" 
-              onClick={() => document.querySelector('.shop-contact-card').scrollIntoView({ behavior: 'smooth' })}
+              className="gallery-cta-btn"
+              onClick={() => window.location.href = "/contact"}
             >
-              Get in Touch Today
+              Request a Quote
             </button>
           </div>
         </div>
       </section>
 
       <Footer />
+
+      {/* Lightbox */}
+      {isOpen && images.length > 0 && (
+        <Lightbox
+          mainSrc={images[photoIndex]}
+          nextSrc={images[(photoIndex + 1) % images.length]}
+          prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+          onCloseRequest={() => setIsOpen(false)}
+          onMovePrevRequest={() =>
+            setPhotoIndex((photoIndex + images.length - 1) % images.length)
+          }
+          onMoveNextRequest={() =>
+            setPhotoIndex((photoIndex + 1) % images.length)
+          }
+          imageTitle={filteredGallery[photoIndex]?.fields?.title || "Our Work"}
+          imageCaption={`Category: ${filteredGallery[photoIndex]?.fields?.category || "Upholstery"}`}
+        />
+      )}
     </div>
   );
 };
 
-export default Shop;
+export default Gallery;

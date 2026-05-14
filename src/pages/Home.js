@@ -1,9 +1,11 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "./Home.css";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const Navigate = useNavigate();
   // const parallaxRef = useRef(null);
 
   useEffect(() => {
@@ -23,7 +25,7 @@ const Home = () => {
   return (
     <div className="home-modern">
       <Navbar />
-      
+
       {/* Hero Section - Full Screen with Parallax */}
       <section className="hero-modern">
         <div className="hero-modern-bg parallax-bg" data-speed="0.3"></div>
@@ -41,10 +43,10 @@ const Home = () => {
             Where traditional mastery meets cutting-edge design
           </p>
           <div className="hero-modern-buttons">
-            <button className="btn-primary-modern">
+            <button onClick={() => Navigate("projects")} className="btn-primary-modern">
               Explore Work <span>→</span>
             </button>
-            <button className="btn-outline-modern">
+            <button onClick={() => Navigate("shop")} className="btn-outline-modern">
               Watch Showreel <span className="play-icon">▶</span>
             </button>
           </div>
@@ -133,9 +135,9 @@ const Home = () => {
           <div className="showcase-content">
             <div className="showcase-text" data-aos="fade-right">
               <span className="section-tag light">Portfolio</span>
-              <h2>Where Vision <br/>Meets <span className="gradient-text">Execution</span></h2>
+              <h2>Where Vision <br />Meets <span className="gradient-text">Execution</span></h2>
               <p>Every project tells a story of transformation, precision, and passion for the craft.</p>
-              <button className="btn-primary-modern">View Full Portfolio →</button>
+              <button onClick={() => Navigate("gallery")} className="btn-primary-modern">View Full Portfolio →</button>
             </div>
             <div className="showcase-grid" data-aos="fade-left">
               <div className="showcase-item">
@@ -160,7 +162,7 @@ const Home = () => {
         <div className="container-modern">
           <div className="section-header-modern">
             <span className="section-tag">Our Process</span>
-            <h2 className="section-title-modern">From Concept <br/>To <span className="gradient-text">Creation</span></h2>
+            <h2 className="section-title-modern">From Concept <br />To <span className="gradient-text">Creation</span></h2>
           </div>
 
           <div className="process-timeline">
@@ -252,9 +254,9 @@ const Home = () => {
           <div className="cta-content-modern" data-aos="zoom-in">
             <h2>Ready to <span className="gradient-text">Transform</span> Your Piece?</h2>
             <p>Let's discuss your project and create something extraordinary together</p>
-            <div className="cta-buttons">
-              <button className="btn-primary-modern btn-large">Get Free Quote</button>
-              <button className="btn-outline-modern btn-large">Call: +234 (701) 276-0072</button>
+            <div  className="cta-buttons">
+              <button onClick={() => Navigate("contact")} className="btn-primary-modern btn-large">Get Free Quote</button>
+              <button onClick={() => Navigate("contact")} className="btn-outline-modern btn-large">Call: +234 (701) 276-0072</button>
             </div>
           </div>
         </div>
